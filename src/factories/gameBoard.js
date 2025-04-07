@@ -37,3 +37,5 @@ const gameBoard = () => {
         getAllNodes: () => boardNodes,
     }
 };
+
+export default gameBoard;
