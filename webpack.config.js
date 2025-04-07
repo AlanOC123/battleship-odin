@@ -31,7 +31,17 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ["style-loader", "css-loader", "postcss-loader"]
-            }
+            },
+            {
+                test: /\.(svg|png|jpeg|jpg)$/i,
+                type: 'asset/resource',
+            },
         ]
+    },
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+        },
+        extensions: ['.js'],
     }
 }
