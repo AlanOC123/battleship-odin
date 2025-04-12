@@ -1,8 +1,13 @@
-const eventsSchema = (() => {
-    const eventNames = new Set();
+const eventsSchema = () => {
+    const eventNames = new Map();
 
-    const addEventName = (newEvent) => {
-        if (!eventNames.has(newEvent)) eventNames.add(newEvent);
+    const addEventName = (newEvent, eventDescription, eventPayload) => {
+        if (!eventNames.has(newEvent)) {
+            eventNames.set(newEvent, {
+                description: eventDescription,
+                payload: eventPayload,
+            })
+        }
     };
 
     const removeEventName = (eventName) => {
@@ -14,11 +19,28 @@ const eventsSchema = (() => {
         eventNames.delete(eventName);
     };
 
-    const describeSchema = () => console.table(eventNames.values());
+    const describeSchema = () => {
+        const table = [...eventNames.entries()].map(([ name, meta ]) => ({
+            event: name,
+            ...meta
+        }));
+
+        console.table(table);
+    }
 
     const clearAll = () => eventNames.clear();
 
     const hasEvent = (eventName) => eventNames.has(eventName);
+
+    const getEventInfo = (eventName) => {
+        if (!eventNames.has(eventName)) {
+            console.warn('Event not found');
+            return null;
+        };
+
+        const event = eventNames.get(eventName);
+        return Object.assign({ name: eventName }, event);
+    }
 
     return {
         addEventName,
@@ -26,7 +48,8 @@ const eventsSchema = (() => {
         describeSchema,
         clearAll,
         hasEvent,
+        getEventInfo
     }
-})();
+};
 
 export default eventsSchema;
