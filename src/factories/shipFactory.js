@@ -1,12 +1,11 @@
 import hashCell from '../helpers/hashCell';
 
-const shipFactory = ({ name, length, axis }) => {
+const shipFactory = ({ name, length }) => {
 
     let shipName = name;
     let shipParts = new Set();
     let shipLength = length;
     let isSunk = false;
-    let shipAxis = axis;
 
     const setShipCoordinate = (x, y) => {
         if (!x || !y) throw new Error(`Missing x or y coordinate. Received: x:${x}, y:${y}`);
