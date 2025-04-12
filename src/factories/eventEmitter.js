@@ -1,11 +1,11 @@
 import eventSchema from "../eventSchema";
 
-const eventEmitter = (() => {
+const eventEmitter = () => {
     const storedEvents = new Map();
 
-    const on = (e, fn) => {
+    const on = (eventList, e, fn) => {
         if (!e || ! fn) throw new Error("Invalid event or function given", );
-        if (!eventSchema.hasEvent(e)) throw new Error("Invalid event name, reference event schema");
+        if (!eventList.includes(e)) throw new Error("Invalid event name, reference event schema");
 
         const event = storedEvents.get(e) || [];
         event.push(fn);
@@ -60,6 +60,6 @@ const eventEmitter = (() => {
         debug,
     };
 
-})();
+};
 
 export default eventEmitter;

@@ -2,10 +2,15 @@ import eventSchema from "../../src/eventSchema";
 import eventEmitter from "../../src/factories/eventEmitter";
 
 describe('Event Emitter', () => {
-    let eventManager = null;
+    let manager = null;
+    let schema = null;
 
-    beforeEach(() => eventManager = eventEmitter);
-    afterEach(() => eventManager = null);
+    beforeEach(() => {
+        schema = eventSchema();
+        manager = eventEmitter();
+    });
+
+    afterEach(() => schema = manager = null);
 
     it ('Correctly adds a new event', () => {
         expect

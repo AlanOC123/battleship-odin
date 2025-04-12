@@ -40,7 +40,9 @@ const eventsSchema = () => {
 
         const event = eventNames.get(eventName);
         return Object.assign({ name: eventName }, event);
-    }
+    };
+
+    const getEventNames = () => Array.from(eventNames.keys());
 
     return {
         addEventName,
@@ -48,7 +50,8 @@ const eventsSchema = () => {
         describeSchema,
         clearAll,
         hasEvent,
-        getEventInfo
+        getEventInfo,
+        getEventNames,
     }
 };
 
