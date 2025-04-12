@@ -1,7 +1,7 @@
-import boardNode from "./boardNode";
+import boardNodeFactory from "./boardNodeFactory";
 import hashCell from "../helpers/hashCell";
 
-const gameBoard = () => {
+const gameBoardFactory = () => {
     const _boardNodes = new Map();
     const _SIZE = 10;
     const _gameBoardElement = document.querySelector('#gameboard');
@@ -10,7 +10,7 @@ const gameBoard = () => {
     const initialiseNodes = () => {
         for (let i = 1; i <= _SIZE; i++) {
             for (let j = 1; j <= _SIZE; j++) {
-                const newCell = boardNode(i, j);
+                const newCell = boardNodeFactory(i, j);
                 _boardNodes.set(hashCell(i, j), newCell);
             };
         };
@@ -47,4 +47,4 @@ const gameBoard = () => {
     }
 };
 
-export default gameBoard;
+export default gameBoardFactory;

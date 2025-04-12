@@ -1,9 +1,9 @@
-import eventsSchema from "../../src/eventSchema";
+import { eventSchemaFactory } from "../../src/gameEventSchema";
 
-describe('eventSchema', () => {
+describe('Event Schema', () => {
     let schema = null;
 
-    beforeEach(() => schema = eventsSchema());
+    beforeEach(() => schema = eventSchemaFactory());
     afterEach(() => schema = null);
 
     it('Correctly allows access to event names', () => {

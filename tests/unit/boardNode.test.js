@@ -1,9 +1,9 @@
-import boardNode from "../../src/factories/boardNode";
+import boardNodeFactory from "../../src/factories/boardNodeFactory";
 
-describe('boardNode', () => {
+describe('Board Node', () => {
     let newNode = null;
 
-    beforeEach(() => newNode = boardNode(1, 2));
+    beforeEach(() => newNode = boardNodeFactory(1, 2));
 
     afterEach(() => newNode = null);
 

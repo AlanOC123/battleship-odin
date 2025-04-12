@@ -1,4 +1,4 @@
-const boardNode = (x, y) => {
+const boardNodeFactory = (x, y) => {
     const coordinates = [x, y];
     let containsShipPart = false;
     let isHit = false;
@@ -33,4 +33,4 @@ const boardNode = (x, y) => {
     }
 };
 
-export default boardNode;
+export default boardNodeFactory;

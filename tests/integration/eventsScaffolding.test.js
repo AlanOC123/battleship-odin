@@ -1,12 +1,12 @@
-import eventEmitter from "../../src/factories/eventEmitter";
-import eventsSchema from "../../src/eventSchema";
+import { eventEmitterFactory } from "../../src/gameEventManager";
+import { eventSchemaFactory } from "../../src/gameEventSchema";
 
 describe('Event Scaffolding Intergration', () => {
     let manager, schema = null;
 
     beforeEach(() => {
-        schema = eventsSchema();
-        manager = eventEmitter();
+        schema = eventSchemaFactory();
+        manager = eventEmitterFactory();
         schema.addEventName('testEvent', 'Tests event integration', 'null')
     });
 

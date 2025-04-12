@@ -1,6 +1,6 @@
 import hashCell from "../../src/helpers/hashCell";
 
-describe('hashCell', () => {
+describe('Hash Cell', () => {
     it('Hashes coordinates to keys correctly', () => {
         expect(hashCell(1, 2)).toBe(`${1}, ${2}`);
         expect(hashCell(10, 10)).not.toBe(10, 10);

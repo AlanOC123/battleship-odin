@@ -1,4 +1,4 @@
-const eventsSchema = () => {
+const eventSchemaFactory = () => {
     const eventNames = new Map();
 
     const addEventName = (newEvent, eventDescription, eventPayload) => {
@@ -55,4 +55,8 @@ const eventsSchema = () => {
     }
 };
 
-export default eventsSchema;
+const gameEventSchema = eventSchemaFactory();
+
+export { eventSchemaFactory };
+
+export default gameEventSchema;

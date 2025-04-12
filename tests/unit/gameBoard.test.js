@@ -1,13 +1,13 @@
-import gameBoard from "../../src/factories/gameBoard";
+import gameBoardFactory from "../../src/factories/gameBoardFactory";
 
-describe('gameBoard', () => {
+describe('Game Board', () => {
     let board = null;
 
     beforeEach(() => {
         const boardEl = document.createElement('div');
         boardEl.id = 'gameboard';
         document.body.append(boardEl);
-        board = gameBoard();
+        board = gameBoardFactory();
     });
     afterEach(() => {
         document.querySelector('#gameboard')?.remove();
