@@ -4,7 +4,11 @@ import hashCell from "../helpers/hashCell";
 const gameBoardFactory = () => {
     const _boardNodes = new Map();
     const _SIZE = 10;
-    const _gameBoardElement = document.querySelector('#gameboard');
+    const _gameBoardClass = 'grid grid-cols-10 grid-rows-10 gap-1 flex-1 h-full'
+    const _gameBoardID = 'gameboard';
+    const _gameBoardElement = document.createElement('div');
+    _gameBoardElement.className = _gameBoardClass;
+    _gameBoardElement.id = _gameBoardID;
     let _isBoardInit = false;
 
     const initialiseNodes = () => {
@@ -44,6 +48,7 @@ const gameBoardFactory = () => {
         getGameBoard: () => new Map(_boardNodes),
         getBoardElement: () => _gameBoardElement,
         isInit: () => _isBoardInit,
+        getID: () => _gameBoardID,
     }
 };
 
