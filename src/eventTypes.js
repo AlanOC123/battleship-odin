@@ -74,16 +74,18 @@ const onShipPlaced = (currentPlayer, coordinates) => {
     });
 };
 
-const onSetUpComplete = () => {
+const onSetUpComplete = (players, boardSize) => {
     const baseEvent = eventType('Set Up Complete').getStructure();
 
     return deepFreeze({
         ...baseEvent,
+        players,
+        boardSize,
         timeStamp: new Date().toISOString(),
     });
 };
 
-const onTurnChange = (currentPlayer, moveCount) => {
+const onTurnChange = (moveCount) => {
     const baseEvent = eventType('Turn Changed').getStructure();
 
     return deepFreeze({
@@ -117,11 +119,12 @@ const onHitRegistered = (attackingPlayer, defendingPlayer, coordinates) => {
     });
 };
 
-const onAllShipsPlaced = () => {
+const onAllShipsPlaced = (numberOfShips) => {
     const baseEvent = eventType('All Ships Placed').getStructure();
 
     return deepFreeze({
         ...baseEvent,
+        numberOfShips,
         timeStamp: new Date().toISOString(),
     });
 };
