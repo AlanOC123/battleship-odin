@@ -58,7 +58,6 @@ describe('Ship Factory', () => {
         expect(() => submarine.setShipCoordinate('three', 3)).toThrow();
         expect(() => submarine.setShipCoordinate(3)).toThrow();
         submarine.setShipCoordinate(1, 3);
-        console.log(submarine.getShipParts());
         expect(submarine.getShipParts().some(([ x, y ]) => x === 1 && y === 3)).toBeTruthy();
         submarine.setShipCoordinate(1, 4);
         submarine.setShipCoordinate(1, 5);
