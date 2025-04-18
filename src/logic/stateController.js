@@ -10,8 +10,7 @@ const stateController = () => {
         _CURRENT_PLAYER_INDEX: 0,
         _CURRENT_PLAYER: null,
         _NUMBER_OF_MOVES: 0,
-        _NUMBER_OF_SHIPS: 10,
-        _BOARD_SIZE: 10,
+        _NUMBER_OF_SHIPS: 0,
         _GAME_WINNER: null,
     };
 
