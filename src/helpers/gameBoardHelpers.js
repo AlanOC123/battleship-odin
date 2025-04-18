@@ -6,4 +6,4 @@ const hashCell = (x, y) => {
     return `${x}, ${y}`;
 }
 
-export default hashCell;
+export { hashCell };
