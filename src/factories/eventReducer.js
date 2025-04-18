@@ -33,3 +33,5 @@ const eventReducer = () => {
         getHandlers,
     };
 };
+
+export default eventReducer;
