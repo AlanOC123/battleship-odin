@@ -19,22 +19,12 @@ const stateController = () => {
         _GAME_WINNER: null,
     };
 
-    const _SINGLETON_EVENTS = [
-        'Set Up Started',
-        'Game Started',
-        'Game Ended',
-        'Set Up Complete',
-        'All Ships Placed',
-        'Game Restarted',
-        'Player Forfeited'
-    ];
-
     const _TIME_STAMPS = [];
 
     const reducer = eventReducer();
 
     return {
-        getState: () => safeClone(_captureState()),
+        getState: () => safeClone(),
         getTimeline: () => [ ..._TIME_STAMPS ],
     }
 };
