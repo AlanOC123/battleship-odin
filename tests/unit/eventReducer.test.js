@@ -1,10 +1,10 @@
-import eventReducer from "../../src/factories/eventReducer";
+import eventReducerFactory from "../../src/factories/eventReducerFactory";
 
 describe('Event Reducer', () => {
     let reducer = null;
 
     beforeEach(() => {
-        reducer = eventReducer();
+        reducer = eventReducerFactory();
     });
 
     afterEach(() => {

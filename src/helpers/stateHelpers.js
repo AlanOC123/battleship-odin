@@ -1,3 +1,5 @@
+import { isCoreEvent } from './eventVerification';
+
 const getCurrentPlayer = (allPlayers, newIndex) => {
     if (!Array.isArray(allPlayers) || allPlayers.length < 2) {
         throw new Error("Invalid players list given", allPlayers);
@@ -64,7 +66,39 @@ const safeClone = (object) => {
 
     return typeof structuredClone === 'function'
     ? structuredClone(object) : JSON.parse(JSON.stringify(object));
+};
+
+const getLastTimeStamp = (currentTimeline) => {
+    const timeLine = [ ...currentTimeline ];
+    return timeLine.pop() || null;
+};
+
+const isDuplicateCoreEvent = (eventName, currentTimeline) => {
+    const lastEvent = getLastTimeStamp(currentTimeline);
+    if (!lastEvent) return false;
+
+    const { event } = lastEvent;
+    return isCoreEvent(eventName) && event === eventName;
 }
+
+const addTimeStamp = (currentTimeline, timeStamp) => {
+    if (!Array.isArray(currentTimeline) || !currentTimeline) {
+        throw new Error("Invalid timeline provided", currentTimeline, typeof timeStamp);
+    };
+
+    if (!timeStamp || typeof timeStamp !== 'object') {
+        throw new Error("Invalid timeStamp provided", timeStamp, typeof timeStamp);
+    };
+
+    const eventName = timeStamp.event;
+    const timelineCopy = [ ...currentTimeline ];
+
+    if (isDuplicateCoreEvent(eventName, timelineCopy)) {
+        throw new Error("Attempted duplicate core event detected", eventName, timelineCopy);
+    };
+
+    return [ ...currentTimeline, timeStamp ];
+};
 
 export {
     getCurrentPlayer,
@@ -73,5 +107,8 @@ export {
     isShipsPlaced,
     canGameStart,
     isGameInProgress,
-    safeClone
+    safeClone,
+    getLastTimeStamp,
+    isDuplicateCoreEvent,
+    addTimeStamp
 }

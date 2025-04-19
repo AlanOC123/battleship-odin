@@ -1,6 +1,6 @@
 import { safeClone } from "../helpers/stateHelpers"
 
-const timeStamp = (eventName, gameState) => {
+const timeStampFactory = (eventName, gameState) => {
     if (!eventName || typeof eventName !== 'string') {
         throw new Error("Invalid event name given", eventName);
     };
@@ -15,4 +15,4 @@ const timeStamp = (eventName, gameState) => {
     return { event: eventName, state: safeClone(gameState), time, domState };
 };
 
-export default timeStamp;
+export default timeStampFactory;

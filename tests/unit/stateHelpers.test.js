@@ -1,4 +1,10 @@
-import { getCurrentPlayer, getNewPlayerIndex, isValidSetUp, isShipsPlaced, canGameStart, isGameInProgress, safeClone } from "../../src/helpers/stateHelpers";
+import {
+    getCurrentPlayer, getNewPlayerIndex, isValidSetUp,
+    isShipsPlaced, canGameStart, isGameInProgress,
+    safeClone, getLastTimeStamp, isDuplicateCoreEvent,
+    addTimeStamp
+} from "../../src/helpers/stateHelpers";
+import timeStampFactory from "../../src/factories/timeStampFactory";
 
 describe('State Helpers', () => {
 
@@ -66,5 +72,38 @@ describe('State Helpers', () => {
         expect(() => getCurrentPlayer('Player One')).toThrow();
         expect(() => getCurrentPlayer(players, 5)).toThrow();
         expect(() => getCurrentPlayer(players, 'one')).toThrow();
+    });
+
+    it('Gets the last time stamp in the timeline', () => {
+        const timeLine = [];
+        expect(getLastTimeStamp(timeLine)).toBeNull();
+
+        const newStamp = timeStampFactory('Game Started', { isSetUp: true });
+        timeLine.push(newStamp);
+
+        expect(getLastTimeStamp(timeLine)).not.toBeNull();
+        expect(timeLine.length).toEqual(1);
+    });
+
+    it('Identifies a duplicate core event entry', () => {
+        const stampOne = timeStampFactory('Game Started', { isSetUp: true });
+        const timeLine = [ stampOne ];
+
+        expect(isDuplicateCoreEvent('Game Started', timeLine)).toBeTruthy();
+        expect(isDuplicateCoreEvent('Game Ended', timeLine)).toBeFalsy();
+    });
+
+    it('Return a new timeline with an added timestamp', () => {
+        const stampOne = timeStampFactory('Game Started', { isSetUp: true });
+        const timeline = [];
+
+        const updated = addTimeStamp(timeline, stampOne);
+
+        expect(timeline.length).toEqual(0);
+        expect(updated.length).toEqual(1);
+
+        expect(() => addTimeStamp('abc', 123)).toThrow();
+        expect(() => addTimeStamp(timeline, stampOne)).not.toThrow();
+        expect(() => addTimeStamp(updated, stampOne)).toThrow();
     });
 });

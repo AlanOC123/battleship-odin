@@ -2,7 +2,7 @@ const eventDispatch = (handlerMap, eventObject) => {
     const tempMap = new Map(handlerMap);
     const tempEvent = Object.assign({}, eventObject);
 
-    const { eventName } = tempEvent;
+    const { eventName } = eventObject;
 
     if (!eventName) {
         throw new Error('Invalid event object given');
@@ -13,8 +13,6 @@ const eventDispatch = (handlerMap, eventObject) => {
     };
 
     const handler = tempMap.get(eventName);
-
-    tempMap = null;
     return handler(tempEvent);
 };
 

@@ -12,31 +12,5 @@ describe('State Controller', () => {
         expect(state?._TIME_STAMPS).toBeUndefined();
     });
 
-    it('Correctly exposes a cloned state', () => {
-
-    });
-
-    it('Correctly dispatches an event', () => {
-
-    });
-
-    it('Correctly blocks invalid events', () => {
-
-    });
-
-    it('Correctly adds and access timeline nodes', () => {
-
-    });
-
-    it('Correctly recognises all ships being placed', () => {
-
-    });
-
-    it('Correctly starts the game', () => {
-
-    });
-
-    it('Correctly updates the player on turn', () => {
-
-    })
+    
 });
