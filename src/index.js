@@ -1,4 +1,8 @@
 import "./styles/main.css";
-import gameBoard from "./factories/gameBoardFactory";
+import launchPageHTML from '../src/pages/launchPageHTML.html';
 
-gameBoard();
+export const injectTemplate = (htmlString) => {
+    const template = document.createElement('template');
+    template.innerHTML = htmlString;
+    document.body.append()
+}

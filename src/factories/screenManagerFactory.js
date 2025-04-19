@@ -1,5 +1,23 @@
+import { clearScreen } from "../helpers/screenManagerHelpers";
+
 const screenManagerFactory = () => {
-    const root = document.getElementById('app');
+    const _root = document.getElementById('app');
+    let _currentScreen = null;
+
+    const renderScreen = (screenComponent) => {
+        clearScreen(_root);
+        _root.append(screenComponent);
+        _currentScreen = screenComponent;
+    };
+
+    return {
+        renderScreen,
+        getCurrentScreen: () => _currentScreen,
+    };
 };
 
-export default screenManagerFactory;
+export { screenManagerFactory };
+
+const screenController = screenManagerFactory();
+
+export default screenController;
