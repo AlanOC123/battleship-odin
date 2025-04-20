@@ -29,6 +29,11 @@ module.exports = {
                 }
             },
             {
+                test: /\.html$/,
+                resourceQuery: /raw/,
+                use: 'raw-loader',
+            },
+            {
                 test: /\.css$/,
                 use: ["style-loader", "css-loader", "postcss-loader"]
             },

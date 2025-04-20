@@ -1,4 +1,4 @@
 import "./styles/main.css";
-import gameBoard from "./factories/gameBoardFactory";
+import screenController from "./factories/screenManagerFactory";
 
-gameBoard();
+document.addEventListener('DOMContentLoaded', screenController.initScreen);
