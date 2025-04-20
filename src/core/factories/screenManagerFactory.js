@@ -1,6 +1,6 @@
 import { clearScreen, injectTemplate } from "../helpers/screenManagerHelpers";
 import launchPageHTML from '../pages/launchPage/launchPageString';
-import gameEventManager from "../gameEventManager";
+import eventHub from "./eventHubFactory";
 
 const screenManagerFactory = () => {
     const _root = document.getElementById('app');
@@ -16,9 +16,7 @@ const screenManagerFactory = () => {
         injectTemplate(_root, launchPageHTML);
         const launchScreenPage = document.getElementById('launch-screen');
         if (!launchScreenPage) throw new Error("Initialisation failed", launchScreenPage);
-
         _currentScreen = document.body;
-        gameEventManager.emit('Launch Screen Loaded')
     };
 
     return {
