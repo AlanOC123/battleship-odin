@@ -1,4 +1,4 @@
-import eventHubFactory from "../factories/eventHubFactory";
+import eventHubFactory from "../factories/eventHubFactory.js";
 import { validateEvent } from "./eventSchemas";
 const eventHub = eventHubFactory(validateEvent);
 

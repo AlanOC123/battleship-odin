@@ -2,7 +2,8 @@ const eventHubFactory = (validatorFn) => {
     const listeners = new Map();
 
     const on = (e, ...fns) => {
-        if (!e || ! fns) throw new Error("Invalid event or function given", );
+        fns = fns.flat();
+        if (!e || fns.length === 0) throw new Error("Invalid event or function given", );
         if (!listeners.has(e)) listeners.set(e, []);
         listeners.get(e).push(...fns);
     };
@@ -13,6 +14,7 @@ const eventHubFactory = (validatorFn) => {
     };
 
     const off = (e, fn) => {
+        if (!e || typeof e !== "string") throw new Error("Invalid event given");
         if (!listeners.has(e)) return;
         if (!fn) { listeners.delete(e); return; };
 
@@ -21,11 +23,13 @@ const eventHubFactory = (validatorFn) => {
     };
 
     const emit = (e, payload) => {
+        if (!e || typeof e !== "string" || typeof payload !== 'object') throw new Error("Invalid event or payload", e, payload);
+
         validatorFn(e, payload);
         (listeners.get(e) || []).forEach(fn => fn(payload));
     }
 
-    const debug = () => ({ events: new Map(storedEvents), length: storedEvents.size });
+    const debug = () => ({ listeners: new Map(listeners), length: listeners.size });
 
     return {
         on,

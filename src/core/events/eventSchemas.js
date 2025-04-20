@@ -1,9 +1,10 @@
 const schemas = {
     'Launch Screen Loaded': {},
     'Launch Button Clicked': {},
+    'Game Set Up': { player: 'string' },
 };
 
-export const validateEvent = (event, payload) => {
+const validateEvent = (event, payload) => {
     if (!event || typeof event !== 'string') throw new Error("Invalid event given", event);
     if (!payload) throw new Error("Invalid data given", payload);
 
@@ -17,3 +18,5 @@ export const validateEvent = (event, payload) => {
 
     return true;
 };
+
+export default validateEvent;

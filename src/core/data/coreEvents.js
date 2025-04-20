@@ -1,4 +1,4 @@
-import attachLaunchBtnListener from "../events/handlers/launchBtnListener";
+import attachLaunchBtnListener from "../../ui/events/handlers/launchBtnListener";
 
 export default [
     [ 'Launch Page Loaded', attachLaunchBtnListener ],

@@ -1,4 +1,4 @@
-import eventHub from "../../core/factories/eventHubFactory";
+import eventHub from "../../../core/events/eventHub";
 
 export default function attachLaunchBtnListener() {
     const btn = document.getElementById('launch-game');
