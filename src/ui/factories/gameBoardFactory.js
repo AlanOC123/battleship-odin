@@ -1,5 +1,5 @@
-import boardNodeFactory from "./boardNodeFactory";
-import { hashCell } from "../utils/gameBoard/hashCell";
+import boardNodeFactory from "../../core/factories/boardNodeFactory";
+import { hashCell } from "../../core/utils/gameBoard/hashCell";
 
 const gameBoardFactory = () => {
     const _boardNodes = new Map();

@@ -26,7 +26,7 @@ const eventLogFactory = () => {
     };
 
     const getAll = () => [ ...timeline ];
-    const getLatest = () => (timeline.length ? timeline[timeline.length - 1] : null);
+    const getLatest = () => (timeline.length ? safeClone(timeline[timeline.length - 1]) : null);
 
     const append = (currentEventName, gameState, domSnapshot = null) => {
         const lastEvent = getLatest();

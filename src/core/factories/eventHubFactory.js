@@ -8,8 +8,8 @@ const eventHubFactory = (validatorFn) => {
         listeners.get(e).push(...fns);
     };
 
-    const once = (e, fn) => {
-        const wrapper = (payload) => { fn(payload); off(e, wrapper); };
+    const once = (e, fn, all = false) => {
+        const wrapper = (payload) => { fn(payload); (all ? off(e) : off(e, wrapper)); };
         on(e, wrapper);
     };
 

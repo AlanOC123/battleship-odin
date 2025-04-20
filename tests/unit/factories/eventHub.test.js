@@ -55,7 +55,6 @@ describe('Event Hub', () => {
             const debug = hub.debug();
             const { listeners } = debug;
             const fns = listeners.get('Test');
-            console.log(fns);
             expect(fns.includes(funcOne)).toBeTruthy();
             expect(fns.includes(funcTwo)).toBeTruthy();
         });
@@ -108,6 +107,18 @@ describe('Event Hub', () => {
             expect(func).toHaveBeenCalledWith({ data: 'Test' });
         });
 
+        it('emits the correct event', () => {
+            const fnA = jest.fn();
+            const fnB = jest.fn();
+
+            hub.on('Launch Screen Loaded', fnA);
+            hub.on('Launch Button Clicked', fnB);
+
+            hub.emit('Launch Screen Loaded', {});
+            expect(fnA).toHaveBeenCalled();
+            expect(fnB).not.toHaveBeenCalled();
+        })
+
         it('correctly throws on missing parameters', () => {
             expect(() => hub.emit()).toThrow();
             expect(() => hub.emit(123, {})).toThrow();
@@ -118,13 +129,25 @@ describe('Event Hub', () => {
     describe('Once Method', () => {
         it('calls a once method only once', () => {
             const func = jest.fn();
-            console.log(hub);
             hub.once('Launch Screen Loaded', func);
             hub.emit('Launch Screen Loaded', {});
-            hub.emit('Launch Screen Loaded', {});
             expect(func).toHaveBeenCalledTimes(1);
+        });
+
+        it('removes the handler after a shallow call', () => {
+            const func = jest.fn();
+            hub.once('Launch Screen Loaded', func);
+            hub.emit('Launch Screen Loaded', {});
             const debug = hub.debug();
             expect(debug.listeners.get('Launch Screen Loaded').length).toEqual(0);
         });
+
+        it('removes an event after a deep call', () => {
+            const func = jest.fn();
+            hub.once('Launch Screen Loaded', func, true);
+            hub.emit('Launch Screen Loaded', {});
+            const debug = hub.debug();
+            expect(debug.listeners.get('Launch Screen Loaded')).toBeUndefined();
+        })
     });
 });

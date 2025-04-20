@@ -1,21 +1,7 @@
-const eventReducerFactory = () => {
-    const handlers = new Map();
+const eventReducerFactory = (eventStructure) => {
+    if (!eventStructure) throw new Error("No events given for module");
 
-    const addHandler = (handlerName, fn) => {
-        if (!handlerName || typeof handlerName !== 'string') {
-            throw new Error('Invalid handler name given');
-        };
-
-        if (!fn || typeof fn !== 'function') {
-            throw new Error('Invalid handler name given');
-        };
-
-        if (handlers.has(handlerName)) {
-            throw new Error('Event already in map');
-        }
-
-        handlers.set(handlerName, fn);
-    };
+    const handlers = new Map(eventStructure);
 
     const removeHandler = (handlerName) => {
         if (!handlers.has(handlerName)) {
@@ -27,10 +13,20 @@ const eventReducerFactory = () => {
 
     const getHandlers = () => new Map(handlers);
 
+    const dispatchHandler = (event, payload) => {
+        if (!event || typeof event !== 'string' || ! payload) throw new Error("Invalid event or payload. Received ", event, payload);
+
+        if (!handlers.has(event)) return;
+        const fns = handlers.get(event);
+        for (const fn of [].concat(fns)) {
+            if (typeof fn === 'function') fn(payload)
+        };
+    };
+
     return {
-        addHandler,
         removeHandler,
         getHandlers,
+        dispatchHandler
     };
 };
 
