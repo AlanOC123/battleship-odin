@@ -1,4 +1,4 @@
-export default eventReducerFactory = () => {
+const eventReducerFactory = () => {
     const handlers = new Map();
 
     const addHandler = (handlerName, fn) => {
@@ -33,3 +33,5 @@ export default eventReducerFactory = () => {
         getHandlers,
     };
 };
+
+export default eventReducerFactory;

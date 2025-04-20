@@ -1,4 +1,4 @@
-export default eventHubFactory = (validatorFn) => {
+const eventHubFactory = (validatorFn) => {
     const listeners = new Map();
 
     const on = (e, ...fns) => {
@@ -35,3 +35,5 @@ export default eventHubFactory = (validatorFn) => {
         debug,
     }
 };
+
+export default eventHubFactory;

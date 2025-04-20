@@ -1,4 +1,4 @@
-import { hashCell } from '../helpers/gameBoardHelpers';
+import { hashCell } from '../utils/gameBoard/hashCell';
 
 const shipFactory = ({ name, length }) => {
 

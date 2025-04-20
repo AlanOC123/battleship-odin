@@ -1,4 +1,5 @@
 import "./ui/styles/main.css";
-import screenController from "./core/factories/screenManagerFactory";
+import screenManager from "./ui/managers/screenManager";
+import launchPageString from './ui/pages/launchPage/launchPageString';
 
-document.addEventListener('DOMContentLoaded', screenController.initScreen);
+document.addEventListener('DOMContentLoaded', () => screenManager.renderScreen(launchPageString));

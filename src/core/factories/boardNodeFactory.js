@@ -1,4 +1,4 @@
-export default boardNodeFactory = (x, y) => {
+const boardNodeFactory = (x, y) => {
     const coordinates = [x, y];
     let containsShipPart = false;
     let isHit = false;
@@ -32,3 +32,5 @@ export default boardNodeFactory = (x, y) => {
         getHitState: () => isHit,
     }
 };
+
+export default boardNodeFactory;
