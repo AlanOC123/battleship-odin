@@ -100,23 +100,53 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
 
 /***/ }),
 
+/***/ "./src/factories/screenManagerFactory.js":
+/*!***********************************************!*\
+  !*** ./src/factories/screenManagerFactory.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__),\n/* harmony export */   screenManagerFactory: () => (/* binding */ screenManagerFactory)\n/* harmony export */ });\n/* harmony import */ var _helpers_screenManagerHelpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/screenManagerHelpers */ \"./src/helpers/screenManagerHelpers.js\");\n/* harmony import */ var _pages_launchPage_launchPageString__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../pages/launchPage/launchPageString */ \"./src/pages/launchPage/launchPageString.js\");\n\n\nvar screenManagerFactory = function screenManagerFactory() {\n  var _root = document.getElementById('app');\n  var _currentScreen = null;\n  var renderScreen = function renderScreen(screenComponent) {\n    (0,_helpers_screenManagerHelpers__WEBPACK_IMPORTED_MODULE_0__.clearScreen)(_root);\n    _root.append(screenComponent);\n    _currentScreen = screenComponent;\n  };\n  var initScreen = function initScreen() {\n    (0,_helpers_screenManagerHelpers__WEBPACK_IMPORTED_MODULE_0__.injectTemplate)(_root, _pages_launchPage_launchPageString__WEBPACK_IMPORTED_MODULE_1__[\"default\"]);\n    var launchScreenPage = document.getElementById('launch-screen');\n    if (!launchScreenPage) throw new Error(\"Initialisation failed\", launchScreenPage);\n    _currentScreen = document.body;\n  };\n  return {\n    renderScreen: renderScreen,\n    initScreen: initScreen,\n    getCurrentScreen: function getCurrentScreen() {\n      return _currentScreen;\n    }\n  };\n};\n\nvar screenController = screenManagerFactory();\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (screenController);\n\n//# sourceURL=webpack://battleship-odin/./src/factories/screenManagerFactory.js?");
+
+/***/ }),
+
+/***/ "./src/helpers/screenManagerHelpers.js":
+/*!*********************************************!*\
+  !*** ./src/helpers/screenManagerHelpers.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   clearScreen: () => (/* binding */ clearScreen),\n/* harmony export */   injectTemplate: () => (/* binding */ injectTemplate)\n/* harmony export */ });\nfunction _typeof(o) { \"@babel/helpers - typeof\"; return _typeof = \"function\" == typeof Symbol && \"symbol\" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && \"function\" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? \"symbol\" : typeof o; }, _typeof(o); }\nvar clearScreen = function clearScreen(root) {\n  if (!root) throw new Error(\"Root component not given\", root);\n  if (!(root instanceof HTMLElement)) throw new Error(\"Invalid root component given\", _typeof(root));\n  root.innerHTML = '';\n};\nvar injectTemplate = function injectTemplate(appElement, htmlString) {\n  if (!htmlString || typeof htmlString !== 'string') throw new Error(\"Invalid html provided.\", htmlString);\n  if (!appElement || !(appElement instanceof HTMLDivElement)) throw new Error(\"Invalid root provided\", appElement);\n  var template = document.createElement('template');\n  template.innerHTML = htmlString;\n  appElement.appendChild(template.content.cloneNode(true));\n};\n\n\n//# sourceURL=webpack://battleship-odin/./src/helpers/screenManagerHelpers.js?");
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   injectTemplate: () => (/* binding */ injectTemplate)\n/* harmony export */ });\n/* harmony import */ var _styles_main_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/main.css */ \"./src/styles/main.css\");\n/* harmony import */ var _src_pages_launchPageHTML_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../src/pages/launchPageHTML.html */ \"./src/pages/launchPageHTML.html\");\n\n\nvar injectTemplate = function injectTemplate(htmlString) {\n  var template = document.createElement('template');\n  template.innerHTML = htmlString;\n  document.body.append();\n};\n\n//# sourceURL=webpack://battleship-odin/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _styles_main_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/main.css */ \"./src/styles/main.css\");\n/* harmony import */ var _factories_screenManagerFactory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./factories/screenManagerFactory */ \"./src/factories/screenManagerFactory.js\");\n\n\ndocument.addEventListener('DOMContentLoaded', _factories_screenManagerFactory__WEBPACK_IMPORTED_MODULE_1__[\"default\"].initScreen);\n\n//# sourceURL=webpack://battleship-odin/./src/index.js?");
 
 /***/ }),
 
-/***/ "./src/pages/launchPageHTML.html":
-/*!***************************************!*\
-  !*** ./src/pages/launchPageHTML.html ***!
-  \***************************************/
+/***/ "./src/pages/launchPage/launchPageHTML.html?raw":
+/*!******************************************************!*\
+  !*** ./src/pages/launchPage/launchPageHTML.html?raw ***!
+  \******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n// Module\nvar code = `<template id=\"launcher\">\n    <div class=\"launcher-screen\">\n        <div class=\"background-image\">\n            <div class=\"logo-container\">\n                <h1 class=\"logo\">BattleShip</h1>\n            </div>\n            <button type=\"button\" id=\"launch-game\">Click to Launch</button>\n        </div>\n    </div>\n</template>\n`;\n// Exports\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (code);\n\n//# sourceURL=webpack://battleship-odin/./src/pages/launchPageHTML.html?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (\"<div id=\\\"launch-screen\\\">\\n    <div class=\\\"background-image flex justify-center items-center bg-launch-page-bg-image\\\">\\n        <div class=\\\"logo-container\\\">\\n            <h1 class=\\\"logo\\\">BattleShip</h1>\\n        </div>\\n        <button type=\\\"button\\\" id=\\\"launch-game\\\">Click to Launch</button>\\n    </div>\\n</div>\\n\");\n\n//# sourceURL=webpack://battleship-odin/./src/pages/launchPage/launchPageHTML.html?");
+
+/***/ }),
+
+/***/ "./src/pages/launchPage/launchPageString.js":
+/*!**************************************************!*\
+  !*** ./src/pages/launchPage/launchPageString.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _launchPageHTML_html_raw__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./launchPageHTML.html?raw */ \"./src/pages/launchPage/launchPageHTML.html?raw\");\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_launchPageHTML_html_raw__WEBPACK_IMPORTED_MODULE_0__[\"default\"]);\n\n//# sourceURL=webpack://battleship-odin/./src/pages/launchPage/launchPageString.js?");
 
 /***/ }),
 

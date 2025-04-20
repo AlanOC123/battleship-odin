@@ -30,10 +30,8 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                loader: 'html-loader',
-                options: {
-                    sources: false,
-                },
+                resourceQuery: /raw/,
+                use: 'raw-loader',
             },
             {
                 test: /\.css$/,

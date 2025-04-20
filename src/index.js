@@ -1,8 +1,4 @@
 import "./styles/main.css";
-import launchPageHTML from '../src/pages/launchPageHTML.html';
+import screenController from "./factories/screenManagerFactory";
 
-export const injectTemplate = (htmlString) => {
-    const template = document.createElement('template');
-    template.innerHTML = htmlString;
-    document.body.append()
-}
+document.addEventListener('DOMContentLoaded', screenController.initScreen);

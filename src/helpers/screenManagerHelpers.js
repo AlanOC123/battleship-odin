@@ -4,12 +4,13 @@ const clearScreen = (root) => {
     root.innerHTML = '';
 };
 
-const injectTemplate = (htmlString) => {
+const injectTemplate = (appElement, htmlString) => {
     if (!htmlString || typeof htmlString !== 'string') throw new Error("Invalid html provided.", htmlString);
+    if (!appElement || !(appElement instanceof HTMLDivElement)) throw new Error("Invalid root provided", appElement);
 
     const template = document.createElement('template');
     template.innerHTML = htmlString;
-    document.body.appendChild(template.content.cloneNode(true));
+    appElement.appendChild(template.content.cloneNode(true));
 };
 
 export {
