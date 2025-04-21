@@ -1,0 +1,28 @@
+const schemas = {
+    'App Started': {},
+    'Page Changed': {
+         page: 'string',
+         loaded: 'string',
+    },
+    'Launch Page Loaded': {},
+    'Set Up Page Loaded': {},
+    'Launch Button Clicked': {},
+    'Game Set Up': { player: 'string' },
+};
+
+const validateEvent = (event, payload) => {
+    if (!event || typeof event !== 'string') throw new Error("Invalid event given", event);
+    if (!payload) throw new Error("Invalid data given", payload);
+
+    const shape = schemas[event];
+
+    if (!shape) throw new Error("Invalid event shape given", event);
+
+    for (const [key, type] of Object.entries(shape)) {
+        if (typeof payload[key] !== type) throw new Error(`Bad ${event} payload`);
+    };
+
+    return true;
+};
+
+export default validateEvent;
