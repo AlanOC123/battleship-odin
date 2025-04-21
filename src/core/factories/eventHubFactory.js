@@ -23,6 +23,7 @@ const eventHubFactory = (validatorFn) => {
     };
 
     const emit = (e, payload) => {
+        console.log(e, payload)
         if (!e || typeof e !== "string" || typeof payload !== 'object') throw new Error("Invalid event or payload", e, payload);
 
         validatorFn(e, payload);

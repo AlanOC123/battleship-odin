@@ -1,6 +1,6 @@
 import eventNames from "../../data/eventNames.js";
 
-const coreEventNames = eventNames.core.map(([name, fn]) => name);
+const coreEventNames = eventNames.core;
 
 const isCoreEvent = (name) => coreEventNames.includes(name);
 

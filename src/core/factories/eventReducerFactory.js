@@ -11,7 +11,12 @@ const eventReducerFactory = (eventStructure) => {
         handlers.delete(handlerName);
     };
 
-    const getHandlers = () => new Map(handlers);
+    const getHandlers = () => ({
+        map: new Map(handlers),
+        events: Array.from(handlers.keys()),
+        fns: Array.from(handlers.values()).flat(),
+        size: handlers.size,
+    })
 
     const dispatchHandler = (event, payload) => {
         if (!event || typeof event !== 'string' || ! payload) throw new Error("Invalid event or payload. Received ", event, payload);

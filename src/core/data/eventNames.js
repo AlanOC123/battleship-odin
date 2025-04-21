@@ -6,7 +6,8 @@ const eventNames = {
         'Ship Placement Started',
         'Ship Placement Complete',
         'Game Started',
-        'Game Ended'
+        'Game Ended',
+        'App Started',
     ],
     game: [
          'Shot Fired',

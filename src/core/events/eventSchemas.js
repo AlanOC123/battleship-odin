@@ -1,5 +1,11 @@
 const schemas = {
-    'Launch Screen Loaded': {},
+    'App Started': {},
+    'Page Changed': {
+         page: 'string',
+         loaded: 'string',
+    },
+    'Launch Page Loaded': {},
+    'Set Up Page Loaded': {},
     'Launch Button Clicked': {},
     'Game Set Up': { player: 'string' },
 };
