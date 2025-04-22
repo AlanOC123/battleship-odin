@@ -6,13 +6,6 @@ const onSetUpPageLoaded = () => {
     let difficulty = null;
     let gameType = null;
 
-    const playerNameInput = document.getElementById('player-name');
-    const aiNameInput = document.getElementById('ai-name');
-    const difficultyBtns = [...document.querySelectorAll('.difficulty-btn')];
-    const gameTypeBtns = [ ...document.querySelectorAll('.game-type-btn') ];
-    const startBtn = document.getElementById('start-game');
-    const cancelBtn = document.getElementById('return-to-launch');
-
     const isValid = playerNameInput
     && aiNameInput
     && difficultyBtns.length
