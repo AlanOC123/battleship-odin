@@ -1,4 +1,4 @@
-import eventHub from "../../core/events/eventHub";
+import eventHub from "../../eventHub";
 import launchPageHTML from './launchPage/launchPageString';
 
 const onAppStart = () => {

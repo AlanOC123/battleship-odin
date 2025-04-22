@@ -1,16 +1,14 @@
 const schemas = {
-    'App Started': {},
     'Page Changed': {
-         page: 'string',
-         loaded: 'string',
-    },
-    'Launch Page Loaded': {},
-    'Set Up Page Loaded': {},
-    'Launch Button Clicked': {},
-    'Game Set Up': { player: 'string' },
+        page: 'string',
+        loaded: 'string',
+   },
+   'Launch Page Loaded': {},
+   'Launch Button Clicked': {},
+   'Set Up Page Loaded': {},
 };
 
-const validateEvent = (event, payload) => {
+const uiEventValidator = (event, payload) => {
     if (!event || typeof event !== 'string') throw new Error("Invalid event given", event);
     if (!payload) throw new Error("Invalid data given", payload);
 
@@ -25,4 +23,4 @@ const validateEvent = (event, payload) => {
     return true;
 };
 
-export default validateEvent;
+export default uiEventValidator;

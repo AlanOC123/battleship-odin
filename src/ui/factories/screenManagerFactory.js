@@ -1,8 +1,9 @@
 import clearScreen from "../utils/screenManager/clearScreen";
 import getTemplateClone from "../utils/screenManager/getTemplateClone";
 import eventReducerFactory from "../../core/factories/eventReducerFactory";
-import eventHub from "../../core/events/eventHub";
+import eventHub from "../../eventHub";
 import onLaunchPageLoaded from "../pages/launchPage/scripts/onLaunchPageLoaded";
+import onSetUpPageLoaded from "../pages/setUpPage/scripts/onSetUpPageLoaded";
 
 const screenManagerFactory = () => {
     const root = document.getElementById('app');
@@ -11,7 +12,7 @@ const screenManagerFactory = () => {
     const renderScreen = (dataObject) => {
         clearScreen(root);
         const htmlString = dataObject?.page;
-        const msg = dataObject?.loaded;
+        const msg = { name: dataObject?.loaded, type: 'ui', src: 'ScreenMnger' };
         if (!htmlString) throw new Error("Invalid payload received", htmlString, dataObject);
         const page = getTemplateClone(htmlString);
         root.append(page);
@@ -21,8 +22,9 @@ const screenManagerFactory = () => {
 
     const eventStructure = [
         [ 'Page Changed', [ renderScreen ] ],
-        [ 'Launch Page Loaded', [ onLaunchPageLoaded ] ]
-    ]
+        [ 'Launch Page Loaded', [ onLaunchPageLoaded ] ],
+        [ 'Set Up Page Loaded', [ onSetUpPageLoaded ] ],
+    ];
 
     const reducer = eventReducerFactory(eventStructure);
 

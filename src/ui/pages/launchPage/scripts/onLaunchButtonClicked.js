@@ -1,9 +1,8 @@
-import eventHub from "../../../../core/events/eventHub";
+import eventHub from "../../../../eventHub";
 import setUpPageHTML from "../../setUpPage/setUpPageString";
 
 const onLaunchButtonClicked = () => {
-    console.log(1);
-    eventHub.emit('Page Changed', { page: setUpPageHTML, loaded: 'Set Up Page Loaded' });
+    eventHub.emit({ name: 'Page Changed', type: 'ui', src: 'LaunchBtn' }, { page: setUpPageHTML, loaded: 'Set Up Page Loaded' });
 };
 
 export default onLaunchButtonClicked;
