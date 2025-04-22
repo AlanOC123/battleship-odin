@@ -2,11 +2,12 @@ import "./ui/styles/main.css";
 import eventHub from "./eventHub";
 import startApp from './ui/pages/onAppStart';
 import screenManager from './ui/managers/screenManager';
+import uiManager from "./ui/managers/UIManager";
 import launchPageHTML from './ui/pages/launchPage/launchPageString';
 import setUpPageHTML from './ui/pages/setUpPage/setUpPageString';
 
 const DEV_MODE = true;
-const PAGE = 'launch';
+const PAGE = 'setup';
 
 startApp();
 document.addEventListener('DOMContentLoaded', () => {

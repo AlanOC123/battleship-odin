@@ -1,11 +1,9 @@
 import clearScreen from "../utils/screenManager/clearScreen";
 import getTemplateClone from "../utils/screenManager/getTemplateClone";
-import eventReducerFactory from "../../core/factories/eventReducerFactory";
-import eventHub from "../../eventHub";
-import onLaunchPageLoaded from "../pages/launchPage/scripts/onLaunchPageLoaded";
-import onSetUpPageLoaded from "../pages/setUpPage/scripts/onSetUpPageLoaded";
+import onLaunchPageLoaded from '../events/handlers/screenManager/onLaunchPageLoaded';
+import onSetUpPageLoaded from '../events/handlers/screenManager/onSetUpPageLoaded';
 
-const screenManagerFactory = () => {
+const screenManagerFactory = (eventHub, reducerFactory) => {
     const root = document.getElementById('app');
     let currentScreen = null;
 
@@ -26,7 +24,7 @@ const screenManagerFactory = () => {
         [ 'Set Up Page Loaded', [ onSetUpPageLoaded ] ],
     ];
 
-    const reducer = eventReducerFactory(eventStructure);
+    const reducer = reducerFactory(eventStructure);
 
     const addEventsToHub = (eventName) => {
         if (!eventName || typeof eventName !== 'string') throw new Error("Invalid event name", eventName);

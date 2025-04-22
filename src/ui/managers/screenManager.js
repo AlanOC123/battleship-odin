@@ -1,3 +1,6 @@
 import screenManagerFactory from "../factories/screenManagerFactory";
-const screenController = screenManagerFactory();
-export default screenController;
+import eventHub from "../../eventHub";
+import eventReducerFactory from '../../core/factories/eventReducerFactory';
+
+const screenManager = screenManagerFactory(eventHub, eventReducerFactory);
+export default screenManager;

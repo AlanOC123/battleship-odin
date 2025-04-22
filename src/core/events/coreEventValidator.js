@@ -1,6 +1,17 @@
 const schemas = {
     'App Started': {},
     'Game Set Up': { player: 'string' },
+    'Name Input Changed': {
+        value: 'string',
+        isValid: 'boolean',
+        reference: 'string',
+    },
+    'Difficulty Selected': {
+        value: 'string',
+    },
+    'Game Type Selected': {
+        value: 'string',
+    },
 };
 
 const coreEventValidator = (event, payload) => {

@@ -24,6 +24,7 @@ const eventHubFactory = (...validatorFns) => {
 
     const emit = (e, payload) => {
         console.log(e);
+        console.log(payload)
         if (!e.name || typeof e.name !== "string" || typeof payload !== 'object') throw new Error("Invalid event or payload", e.name, payload);
         const [ coreVal, uiVal ] = validatorFns;
 

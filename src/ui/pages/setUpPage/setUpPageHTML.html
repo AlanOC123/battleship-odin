@@ -1,6 +1,6 @@
 <div id="launch-screen" class="relative background-image">
     <!-- Overlay -->
-    <div class="absolute inset-0 bg-slate-600/50"></div>
+    <div class="absolute inset-0 bg-slate-600/50 backdrop-blur-md"></div>
     <!-- Content Container -->
     <div class="relative z-10 flex justify-center items-center h-full">
         <div class="bg-white/75 shadow-xl rounded-2xl p-8 max-w-md w-full space-y-6 backdrop-blur-md">
@@ -16,7 +16,7 @@
                     type="text"
                     name="player-name"
                     id="player-name"
-                    class="mt-1 w-full rounded-md border-slate-300 p-1 shadow-sm focus:ring focus:ring-blue-200"
+                    class="mt-1 w-full rounded-md p-2 shadow-sm"
                   >
                   <span
                     id="player-name-error"
@@ -34,7 +34,7 @@
                     type="text"
                     name="ai-name"
                     id="ai-name"
-                    class="mt-1 w-full rounded-md border-slate-300 p-1 shadow-sm focus:ring focus:ring-blue-200"
+                    class="mt-1 w-full rounded-md border-slate-300 p-2 shadow-sm focus:ring focus:ring-blue-200"
                   >
                   <span
                     id="ai-name-error"
@@ -53,16 +53,12 @@
                     <button
                         type="button"
                         class="game-type-btn flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-all duration-300 cursor-pointe"
-                    >
-                        PvE
-                    </button>
+                    >PvE</button>
                     <button
                         type="button"
                         class="game-type-btn flex-1 bg-gray-400 text-white py-2 rounded-lg cursor-not-allowed opacity-50"
                         disabled
-                    >
-                        PvP (Coming Soon)
-                    </button>
+                    >PvP (Coming Soon)</button>
                 </div>
             </div>
 

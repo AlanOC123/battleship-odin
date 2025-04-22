@@ -6,6 +6,16 @@ const schemas = {
    'Launch Page Loaded': {},
    'Launch Button Clicked': {},
    'Set Up Page Loaded': {},
+   'Name Input Validated': {
+        target: 'object',
+        isValid: 'boolean',
+    },
+    'Difficulty Button Clicked': {
+        target: 'object',
+    },
+    'Game Type Button Clicked': {
+        target: 'object',
+    },
 };
 
 const uiEventValidator = (event, payload) => {
