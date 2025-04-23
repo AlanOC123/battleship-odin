@@ -28,7 +28,7 @@ const DOMControllerFactory = () => {
     };
 
     const getLaunchPageElements = () => {
-        const launchGameBtn = document.getElementById('launch-game');
+        const launchGameBtn = getElement('#launch-game');
 
         return {
             start: launchGameBtn
