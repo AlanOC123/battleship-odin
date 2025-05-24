@@ -1,4 +1,4 @@
-import eventReducerFactory from "../../../src/core/factories/eventReducerFactory";
+import eventReducerFactory from "../../../src/factories/eventReducerFactory";
 
 describe('Event Reducer', () => {
     let reducer = null;

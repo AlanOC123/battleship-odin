@@ -1,12 +1,20 @@
-import eventHubFactory from "../../../src/core/factories/eventHubFactory";
+import eventHubFactory from "../../../src/factories/eventHubFactory";
 import uiEventValidator from "../../../src/ui/events/uiEventValidator";
 import coreEventValidator from "../../../src/core/events/coreEventValidator";
+import eventLogFactory from '../../../src/factories/eventLogFactory';
 
 describe('Event Hub', () => {
+    let log = null;
     let hub = null;
 
-    beforeEach(() => hub = eventHubFactory(coreEventValidator, uiEventValidator));
-    afterEach(() => hub = null);
+    beforeEach(() => {
+        log = eventLogFactory(['Test']);
+        hub = eventHubFactory(log, coreEventValidator, uiEventValidator);
+    });
+    afterEach(() => {
+        hub = null;
+        log = null;
+    });
 
     describe('Debug Method', () => {
         it('gives correct debug information', () => {
@@ -103,7 +111,7 @@ describe('Event Hub', () => {
         });
 
         it('correctly emits an event', () => {
-            hub.emit({ name: 'Launch Page Loaded', type: 'ui' }, { data: 'Test' });
+            hub.emit({ name: 'Launch Page Loaded', type: 'ui', src: 'test' }, { data: 'Test' });
             expect(func).toHaveBeenCalled();
             expect(func).toHaveBeenCalledWith({ data: 'Test' });
         });
@@ -115,7 +123,7 @@ describe('Event Hub', () => {
             hub.on('Launch Page Loaded', fnA);
             hub.on('Test', fnB);
 
-            hub.emit({ name: 'Launch Page Loaded', type: 'ui' }, {});
+            hub.emit({ name: 'Launch Page Loaded', type: 'ui', src: 'test' }, {});
             expect(fnA).toHaveBeenCalled();
             expect(fnB).not.toHaveBeenCalled();
         })
@@ -131,14 +139,14 @@ describe('Event Hub', () => {
         it('calls a once method only once', () => {
             const func = jest.fn();
             hub.once('Launch Page Loaded', func);
-            hub.emit({ name: 'Launch Page Loaded', type: 'ui' }, {});
+            hub.emit({ name: 'Launch Page Loaded', type: 'ui', src: 'test' }, {});
             expect(func).toHaveBeenCalledTimes(1);
         });
 
         it('removes the handler after a shallow call', () => {
             const func = jest.fn();
             hub.once('Launch Page Loaded', func);
-            hub.emit({ name: 'Launch Page Loaded', type: 'ui' }, {});
+            hub.emit({ name: 'Launch Page Loaded', type: 'ui', src: 'test' }, {});
             const debug = hub.debug();
             expect(debug.listeners.get('Launch Page Loaded').length).toEqual(0);
         });
@@ -146,7 +154,7 @@ describe('Event Hub', () => {
         it('removes an event after a deep call', () => {
             const func = jest.fn();
             hub.once('Launch Page Loaded', func, true);
-            hub.emit({ name: 'Launch Page Loaded', type: 'ui' }, {});
+            hub.emit({ name: 'Launch Page Loaded', type: 'ui', src: 'test' }, {});
             const debug = hub.debug();
             expect(debug.listeners.get('Launch Page Loaded')).toBeUndefined();
         })

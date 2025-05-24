@@ -12,6 +12,12 @@ const schemas = {
     'Game Type Selected': {
         value: 'string',
     },
+    'State Changed': {
+        updatedState: 'object',
+    },
+    'Set Up Started': {
+        isSetUpStarted: 'boolean'
+    },
 };
 
 const coreEventValidator = (event, payload) => {

@@ -1,4 +1,4 @@
-import onLaunchButtonClicked from "../../../pages/launchPage/scripts/onLaunchButtonClicked";
+import onLaunchButtonClicked from "../btnClicks/onLaunchButtonClicked";
 
 const onLaunchPageLoaded = () => {
     const btn = document.getElementById('launch-game');

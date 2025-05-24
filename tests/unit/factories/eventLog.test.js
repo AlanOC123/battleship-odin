@@ -1,64 +1,47 @@
-import eventLogFactory from "../../../src/core/factories/eventLogFactory";
+import eventLogFactory from "../../../src/factories/eventLogFactory";
 
 describe('Event Log', () => {
     let log = null;
-    beforeEach(() => log = eventLogFactory());
+    beforeEach(() => log = eventLogFactory([ 'Test' ]));
     afterEach(() => log = null);
 
     describe('Get All Method', () => {
-        it('gets all the stamps', () => {
-            expect(log.getAll()).toEqual([]);
-        });
-
-        it('prevents mutation of timeline', () => {
-            const timeline = log.getAll();
-            timeline.push('Test');
+        it('gets a copy of the timeline', () => {
+            const t = log.getAll();
+            expect(t.length).toEqual(0);
+            t[0] = 1;
             expect(log.getAll().length).toEqual(0);
-        });
-
-        it('prevents access to private timeline', () => {
-            expect(log?.timeline).toBeUndefined();
-        });
+        })
     })
 
-    describe('Add Time Stamp Method', () => {
+    describe('Append Method', () => {
         it('correctly creates and adds a new time stamp', () => {
-            expect(log.getAll().length).toEqual(0);
-            log.append('Test', { a: true });
+            const event = { name: 'Test', type: 'Test', src: 'Test' };
+            log.append(event, { data: 'Test' });
             expect(log.getAll().length).toEqual(1);
         });
 
-        it('prevents duplicate cores from being added', () => {
-            log.append('Launch Page Loaded', { a: true });
-            expect(log.getAll().length).toEqual(1);
-            expect(() => log.append('Launch Page Loaded', { a: true })).toThrow();
-            expect(log.getAll().length).toEqual(1);
-        })
-    });
-
-    describe('Get Latest Method', () => {
-        it('get the latest timestamp from the timeline', () => {
-            log.append('Test', { a: true });
-            expect(log.getLatest()).toEqual(expect.objectContaining({ event: 'Test', state: { a: true } }));
+        it('prevents duplicate unique events from being added', () => {
+            const event = { name: 'Test', type: 'Test', src: 'Test' };
+            log.append(event, { data: 'Test' });
+            expect(() => log.append(event, { data: 'Test' })).toThrow()
         });
 
-        it('keeps the timeline intact when getting the latest', () => {
-            log.append('Test', { a: true });
-            expect(log.getAll().length).toEqual(1);
-            let latest = log.getLatest();
-            expect(log.getAll().length).toEqual(1);
-            latest.event = 'wrong';
-            expect(log.getLatest()).toEqual(expect.objectContaining({ event: 'Test' }));
+        it('throws on invalid or missing event data', () => {
+            expect(() => log.append()).toThrow();
+            expect(() => log.append('Test', {})).toThrow();
+            expect(() => log.append({}, {})).toThrow();
+            expect(() => log.append({ name: 'Test', type: 'Test', src: 'Test' })).toThrow();
         });
     });
 
     describe('Clear All Method', () => {
-        it('clears all stamps from timeline', () => {
-            log.append('Test', { a: true });
+        it('clears all logs in the timeline', () => {
+            const event = { name: 'Test', type: 'Test', src: 'Test' };
+            log.append(event, { data: 'Test' });
             expect(log.getAll().length).toEqual(1);
             log.clearAll();
             expect(log.getAll().length).toEqual(0);
-            expect(log.getLatest()).toBeNull();
         });
     });
 });

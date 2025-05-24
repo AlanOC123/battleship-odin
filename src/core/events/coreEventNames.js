@@ -1,11 +1,5 @@
-const uiEventNames = {
-    core: [
-        'App Started',
-    ],
-    state: [
-        'Name Input Changed',
-        'Difficulty Selected',
-    ],
-};
+const uniqueCoreEvents = [
+    'App Started'
+];
 
-export default uiEventNames;
+export default uniqueCoreEvents;

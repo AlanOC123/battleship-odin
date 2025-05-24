@@ -1,4 +1,4 @@
-const eventHubFactory = (...validatorFns) => {
+const eventHubFactory = (eventLog, ...validatorFns) => {
     const listeners = new Map();
 
     const on = (e, ...fns) => {
@@ -23,8 +23,6 @@ const eventHubFactory = (...validatorFns) => {
     };
 
     const emit = (e, payload) => {
-        console.log(e);
-        console.log(payload)
         if (!e.name || typeof e.name !== "string" || typeof payload !== 'object') throw new Error("Invalid event or payload", e.name, payload);
         const [ coreVal, uiVal ] = validatorFns;
 
@@ -37,6 +35,8 @@ const eventHubFactory = (...validatorFns) => {
 
         validatorFn(e.name, payload);
         (listeners.get(e.name) || []).forEach(fn => fn(payload));
+        eventLog.append(e, payload);
+        console.log(eventLog.getAll());
     }
 
     const debug = () => ({ listeners: new Map(listeners), length: listeners.size });
