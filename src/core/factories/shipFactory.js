@@ -1,4 +1,9 @@
-import { hashCell } from '../utils/gameBoard/hashCell';
+import hashCell from '../utils/gameBoard/hashCell';
+import battleShipImage from '../../../public/assets/Sea Warfare Set/Battleship/ShipBattleShipHull.png';
+import carrierImage from '../../../public/assets/Sea Warfare Set/Carrier/ShipCarrierHull.png';
+import destroyerImage from '../../../public/assets/Sea Warfare Set/Destroyer/ShipDestroyerHull.png';
+import patrolBoatImage from '../../../public/assets/Sea Warfare Set/PatrolBoat/ShipPatrolHull.png';
+import submarineImage from '../../../public/assets/Sea Warfare Set/Submarine/ShipSubMarineHull.png';
 
 const shipFactory = ({ name, length }) => {
 
@@ -6,6 +11,13 @@ const shipFactory = ({ name, length }) => {
     let shipParts = new Set();
     let shipLength = length;
     let isSunk = false;
+    let shipSprite = {
+        'Battleship': battleShipImage,
+        'Carrier': carrierImage,
+        'Destroyer': destroyerImage,
+        'Patrol Boat': patrolBoatImage,
+        'Submarine': submarineImage,
+    }[name];
 
     const setShipCoordinate = (x, y) => {
         if (!x || !y) throw new Error(`Missing x or y coordinate. Received: x:${x}, y:${y}`);
@@ -35,6 +47,7 @@ const shipFactory = ({ name, length }) => {
         getShipParts: () => Array.from(shipParts.values(), key => [ Number(key.split(',')[0]), Number(key.split(', ')[1]) ]),
         getShipLength: () => shipLength,
         getIsShipSunk: () => isSunk,
+        getShipSprite: () => shipSprite,
     }
 };
 

@@ -36,7 +36,6 @@ const eventHubFactory = (eventLog, ...validatorFns) => {
         validatorFn(e.name, payload);
         (listeners.get(e.name) || []).forEach(fn => fn(payload));
         eventLog.append(e, payload);
-        console.log(eventLog.getAll());
     }
 
     const debug = () => ({ listeners: new Map(listeners), length: listeners.size });

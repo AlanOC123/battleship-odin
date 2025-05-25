@@ -2,6 +2,7 @@ import clearScreen from "../utils/screenManager/clearScreen";
 import getTemplateClone from "../utils/screenManager/getTemplateClone";
 import onLaunchPageLoaded from '../events/handlers/screenManager/onLaunchPageLoaded';
 import onSetUpPageLoaded from '../events/handlers/screenManager/onSetUpPageLoaded';
+import onShipPlacementLoaded from "../events/handlers/screenManager/onShipPlacementLoaded";
 
 const screenManagerFactory = (eventHub, reducerFactory) => {
     const root = document.getElementById('app');
@@ -22,6 +23,7 @@ const screenManagerFactory = (eventHub, reducerFactory) => {
         [ 'Page Changed', [ renderScreen ] ],
         [ 'Launch Page Loaded', [ onLaunchPageLoaded ] ],
         [ 'Set Up Page Loaded', [ onSetUpPageLoaded ] ],
+        [ 'Ship Placement Loaded', [ onShipPlacementLoaded ] ],
     ];
 
     const reducer = reducerFactory(eventStructure);

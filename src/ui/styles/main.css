@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import url('./validation.css');
+@import url('./gameboard.css');
 
 .background-image {
     background-image: url('../../../public/assets/battleship-background.jpg');

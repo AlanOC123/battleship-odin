@@ -1,6 +1,7 @@
 import eventHub from "./eventHub";
 import launchPageHTML from './ui/pages/launchPage/launchPageString';
 import setUpPageHTML from './ui/pages/setUpPage/setUpPageString';
+import placeShipsHTML from './ui/pages/gameBoard/placeShipsHTMLString';
 import screenManager from './ui/managers/screenManager';
 import uiManager from "./ui/managers/uiManager";
 import stateManager from "./core/managers/stateManager";
@@ -18,6 +19,7 @@ const startApp = (DEV_MODE=false, PAGE='launch') => {
         const ROUTER = {
             'launch': { page: launchPageHTML, loaded: 'Launch Page Loaded' },
             'setup': { page: setUpPageHTML, loaded: 'Set Up Page Loaded' },
+            'place ships': { page: placeShipsHTML, loaded: 'Ship Placement Loaded' },
         };
 
         UI_PAYLOAD = ROUTER[PAGE] || ROUTER['launch'];

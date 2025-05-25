@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "test": "jest --verbose",
+    "test-only": "npx jest",
     "start": "webpack serve",
     "build": "webpack",
     "reset-package": "rm -rf node_modules package-lock.json && npm install"

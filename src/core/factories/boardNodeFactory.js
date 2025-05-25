@@ -1,35 +1,35 @@
+import hashCell from '../utils/gameBoard/hashCell';
+
 const boardNodeFactory = (x, y) => {
     const coordinates = [x, y];
     let containsShipPart = false;
     let isHit = false;
     let element = null;
-
-    const renderNode = () => {
-        const el = document.createElement('div');
-        el.className = "w-full h-full bg-blue-400 hover:bg-blue-500 border border-blue-800 rounded-sm transition transform hover:-translate-y-0.5";
-        element = el;
-    };
+    const edges = new Set();
+    const id = hashCell(x, y);
 
     const hasShip = () => containsShipPart;
     const setNodeContainsShipPart = (value = true) => (containsShipPart = value);
+    const addEdge = (node) => {
+        if (!node) throw new Error("No node given");
+        edges.add(node);
+    };
 
-    const recieveAttack = () => {
+    const receiveAttack = () => {
         isHit = true;
-        if (element) {
-            element.className = containsShipPart ? "bg-red-500" : "bg-gray-400"
-        };
-
         return containsShipPart ? "hit" : "miss";
     }
 
     return {
         hasShip,
         setNodeContainsShipPart,
-        recieveAttack,
-        renderNode,
+        receiveAttack,
+        addEdge,
         getCoordinates: () => coordinates,
         getElement: () => element,
         getHitState: () => isHit,
+        getID: () => id,
+        getEdges: () => Array.from(edges),
     }
 };
 
