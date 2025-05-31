@@ -10,6 +10,7 @@ const playerFactory = (playerName, isAIPlayer = false) => {
     let fleet = createFleet();
     let fleetSize = fleet.length;
     const shipsSunk = [];
+    const map = gameBoardFactory(id);
 
     const getShipLostMetaData = (ship) => {
         const timeSunk = Date.now();
@@ -43,6 +44,7 @@ const playerFactory = (playerName, isAIPlayer = false) => {
         getFleet: () => Array.from(fleet),
         getShipsLeft: () => fleetSize,
         getShipsLost: () => Array.from(shipsSunk),
+        getMap: () => ({ ...map }),
         shipLost,
     }
 };

@@ -45,5 +45,10 @@ describe('Player Factory', () => {
         it('Gets the number of ships left', () => {
             expect(player.getShipsLeft()).toEqual(5);
         });
+
+        it('Correctly gets the player map', () => {
+            expect(player.getMap()).toEqual(expect.any(Object));
+            expect(Object.entries(player.getMap()).length).toBeGreaterThan(0);
+        });
     });
 });

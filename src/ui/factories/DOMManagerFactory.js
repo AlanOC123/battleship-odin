@@ -62,7 +62,7 @@ const DOMControllerFactory = () => {
                 cancel,
             },
         };
-    }
+    };
 
     return {
         getLaunchPageElements,
