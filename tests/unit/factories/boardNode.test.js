@@ -14,8 +14,8 @@ describe('Board Node', () => {
         });
 
         it('Correctly hashes its ID', () => {
-            expect(node.getID()).toEqual(expect.any(String));
-            expect(node.getID()).toEqual('3, 4');
+            expect(node.getID()).toEqual(expect.any(Number));
+            expect(node.getID()).toEqual(34);
         });
     });
 

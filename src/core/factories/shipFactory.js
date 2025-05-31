@@ -1,53 +1,74 @@
-import hashCell from '../utils/gameBoard/hashCell';
-import battleShipImage from '../../../public/assets/Sea Warfare Set/Battleship/ShipBattleShipHull.png';
-import carrierImage from '../../../public/assets/Sea Warfare Set/Carrier/ShipCarrierHull.png';
-import destroyerImage from '../../../public/assets/Sea Warfare Set/Destroyer/ShipDestroyerHull.png';
-import patrolBoatImage from '../../../public/assets/Sea Warfare Set/PatrolBoat/ShipPatrolHull.png';
-import submarineImage from '../../../public/assets/Sea Warfare Set/Submarine/ShipSubMarineHull.png';
+const shipFactory = ({ name, length, id }) => {
+    const shipName = name;
+    const shipLength = length;
+    const owner = id;
 
-const shipFactory = ({ name, length }) => {
-
-    let shipName = name;
-    let shipParts = new Set();
-    let shipLength = length;
+    let timesHit = 0;
     let isSunk = false;
-    let shipSprite = {
-        'Battleship': battleShipImage,
-        'Carrier': carrierImage,
-        'Destroyer': destroyerImage,
-        'Patrol Boat': patrolBoatImage,
-        'Submarine': submarineImage,
-    }[name];
+    let isFound = false;
+    let orientation = 'X';
+    let coordinates = new Map();
 
-    const setShipCoordinate = (x, y) => {
-        if (!x || !y) throw new Error(`Missing x or y coordinate. Received: x:${x}, y:${y}`);
-        if (isNaN(x) || isNaN(y)) throw new Error(`Invalid x or y coordinate. Received: x:${x}, y:${y}`);
-        if (shipParts.size >= shipLength) throw new Error(`Too many parts given for ship to be valid.`);
-        shipParts.add(hashCell(x, y));
-    };
-
+    const setIsFound = (state = true) => isFound = state;
     const sinkShip = () => isSunk = true;
 
-    const checkShipStatus = () => {
-        if (!shipParts.size) sinkShip();
+    const addCoordinate = ({ nodeID, position }) => {
+        if (!nodeID) throw new Error("Invalid node provided");
+        if (coordinates.has(nodeID)) throw new Error("Node already present");
+
+        const metaData = {
+            isHit: false,
+            segment: (position === 1 ? 'Head' : position === shipLength ? 'Tail' : 'Body'),
+        }
+        coordinates.set(nodeID, metaData);
     };
 
-    const receivedHit = ({ coordinates }) => {
-        const { x, y } = coordinates;
-        const hashVal = hashCell(x, y);
-        if (!shipParts.has(hashVal)) return null;
-        shipParts.delete(hashVal);
-        checkShipStatus();
+    const receiveHit = ({ nodeID }) => {
+        if (!nodeID) throw new Error("No Node ID Provided");
+        const node = coordinates.get(nodeID);
+        if (!node) return 'Invalid target';
+        if (node.isHit) return 'Already destroyed';
+
+        const isFirstHit = timesHit === 0;
+        timesHit += 1;
+
+        if (isFirstHit) setIsFound(true);
+        node.isHit = true;
+
+        if (timesHit === shipLength - 1) sinkShip();
+
+        return `${shipName} Hit`;
     };
+
+    const removeCoordinate = (nodeID) => {
+        if (coordinates.has(nodeID)) coordinates.delete(nodeID);
+    };
+
+    const switchAxis = () => orientation = orientation === 'X' ? 'Y' : 'X';
+
+    const resetShip = () => {
+        timesHit = 0;
+        isSunk = false;
+        isFound = false;
+        orientation = 'X';
+        coordinates = new Map();
+    }
 
     return {
-        setShipCoordinate,
-        receivedHit,
-        getShipName: () => shipName,
-        getShipParts: () => Array.from(shipParts.values(), key => [ Number(key.split(',')[0]), Number(key.split(', ')[1]) ]),
-        getShipLength: () => shipLength,
-        getIsShipSunk: () => isSunk,
-        getShipSprite: () => shipSprite,
+        getName: () => shipName,
+        getLength: () => shipLength,
+        getOwner: () => owner,
+        getTimesHit: () => timesHit,
+        getIsSunk: () => isSunk,
+        getIsFound: () => isFound,
+        getAxis: () => orientation,
+        getCoordinates: () => Array.from(coordinates.keys()),
+        getSegments: () => Array.from(coordinates.entries()),
+        addCoordinate,
+        removeCoordinate,
+        switchAxis,
+        receiveHit,
+        resetShip,
     }
 };
 

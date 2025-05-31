@@ -34,7 +34,6 @@ describe('Event Reducer', () => {
 
         it('correctly gets an array of fns from the keys thats immutable', () => {
             const { fns } = reducer.getHandlers();
-            console.log(fns)
             expect(fns).toEqual(expect.arrayContaining([ expect.any(Function) ]));
             function badFunc() { return 4 }
             fns.push(badFunc);

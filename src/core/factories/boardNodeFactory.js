@@ -1,4 +1,4 @@
-import hashCell from '../utils/gameBoard/hashCell';
+import hashBoardNode from '../logic/hashBoardNode';
 
 const boardNodeFactory = (x, y) => {
     const coordinates = [x, y];
@@ -6,7 +6,7 @@ const boardNodeFactory = (x, y) => {
     let isHit = false;
     let element = null;
     const edges = new Set();
-    const id = hashCell(x, y);
+    const id = hashBoardNode(x, y);
 
     const hasShip = () => containsShipPart;
     const setNodeContainsShipPart = (value = true) => (containsShipPart = value);

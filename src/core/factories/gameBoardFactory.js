@@ -1,8 +1,9 @@
 import boardNodeFactory from "./boardNodeFactory";
-import hashCell from "../utils/gameBoard/hashCell";
+import hashBoardNode from "../logic/hashBoardNode";
 
-const gameBoardFactory = () => {
+const gameBoardFactory = (id) => {
     const SIZE = 10;
+    const owner = id;
     const graphNodes = new Map();
 
     const getNode = (nodeID) => graphNodes.get(nodeID) ?? null;
@@ -17,7 +18,7 @@ const gameBoardFactory = () => {
 
         for (let i = 0; i < SIZE; i++) {
             for (let j = 0; j < SIZE; j++) {
-                const currID = hashCell(i, j);
+                const currID = hashBoardNode(i, j);
                 const currNode = getNode(currID) ?? boardNodeFactory(i, j);
 
                 directions.forEach(({ dx, dy }) => {
@@ -25,7 +26,7 @@ const gameBoardFactory = () => {
                     const nj = j + dy;
 
                     if (ni >= 0 && ni < SIZE && nj >= 0 && nj < SIZE) {
-                        const edgeID = hashCell(ni, nj);
+                        const edgeID = hashBoardNode(ni, nj);
                         const edgeNode = getNode(edgeID) ?? boardNodeFactory(ni, nj);
                         if (!graphNodes.has(edgeID)) graphNodes.set(edgeID, edgeNode);
                         currNode.addEdge(edgeNode);
@@ -43,6 +44,7 @@ const gameBoardFactory = () => {
         getSingleNode: (nodeID) => getNode(nodeID) ? Object.assign({}, getNode(nodeID)) : null,
         getGraph: () => new Map(graphNodes),
         getGraphArray: () => Array.from(graphNodes).flat().filter((_, i) => i % 2 > 0),
+        getOwner: () => owner,
     };
 };
 
