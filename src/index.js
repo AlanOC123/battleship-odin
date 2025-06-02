@@ -1,4 +1,3 @@
-const DEV_MODE = true;
-const PAGE = 'launch';
+import start from "./start";
 
-document.addEventListener('DOMContentLoaded', () => console.log('Start'));
+document.addEventListener('DOMContentLoaded', () => start());
