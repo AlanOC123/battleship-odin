@@ -1,61 +1,74 @@
-import { buildMockEvent, mockPayload } from "../__mocks__/events.mock";
+import {
+    validMockPayload,
+    invalidMockPayload,
+    partialMockPayload,
+    createGenericMockEventID,
+    createUniqueMockEventID,
+} from "../__mocks__/events.mock";
+
 import hub from "../../src/events/hub";
 
 describe('Event Hub', () => {
-    const handler = jest.fn();
-    let event = null;
+    const SRC = '[Hub Test]';
 
-    beforeEach(() => {
-        event = buildMockEvent();
-        handler.mockClear();
-        hub.removeAll()
-    })
+    const eventNames = {
+        test_one: 'mock-generic-event',
+        test_two: 'mock-unique-event'
+    };
 
-    it('registers a handler and emits an event successfully', () => {
-        hub.on(event.key, handler);
-        hub.emit(event, mockPayload);
+    const eventKeys = {
+        test_one: createGenericMockEventID(),
+        test_two: createUniqueMockEventID(),
+    };
 
-        expect(handler).toHaveBeenCalledWith(mockPayload);
+    const mockFnOne = jest.fn();
+    const mockFnTwo = jest.fn();
+    const mockFnThree = jest.fn();
+
+    beforeEach(() => hub.clearHub());
+
+    it('subscribes one or more handlers from a source to an event', () => {
+        expect(hub.subscribeTo(eventNames.test_one, SRC, mockFnOne)).toBeTruthy();
+        expect(hub.subscribeTo(eventNames.test_one, 123, mockFnOne)).toBeFalsy();
+        expect(hub.subscribeTo(eventNames.test_one, SRC)).toBeFalsy();
+        expect(hub.subscribeTo(eventNames.test_one, SRC, mockFnTwo, mockFnThree)).toBeTruthy();
     });
 
-    it('calls handler multiple times on successive emits', () => {
-        hub.on(event.key, handler);
-        hub.emit(event, mockPayload);
-        hub.emit(event, mockPayload);
+    it('unsubscribes one or more handlers from a source from an event', () => {
+        expect(hub.unsubscribeFrom()).toBeFalsy();
+        expect(hub.unsubscribeFrom(eventNames.test_one)).toBeFalsy();
+        expect(hub.unsubscribeFrom(eventNames.test_one, SRC)).toBeFalsy();
 
-        expect(handler).toHaveBeenCalledTimes(2);
+        hub.subscribeTo(eventNames.test_one, SRC, mockFnOne, mockFnTwo, mockFnThree);
+        expect(hub.unsubscribeFrom(eventNames.test_one, SRC)).toBeTruthy();
+        expect(hub.unsubscribeFrom(eventNames.test_one, SRC)).toBeFalsy();
     });
 
-    it('throws when emitting an invalid event payload', () => {
-        const invalidPayload = { foo: 123 };
-
-        expect(() => hub.emit(event, invalidPayload)).toThrow();
+    it('removes all sources from an event', () => {
+        hub.subscribeTo(eventNames.test_one, SRC, mockFnOne, mockFnTwo, mockFnThree);
+        expect(hub.removeEvent(eventNames.test_one)).toBeTruthy();
+        expect(hub.unsubscribeFrom(eventNames.test_one, SRC)).toBeFalsy();
     });
 
-    it('throws if payload is missing or undefined', () => {
-        hub.on(event.key, handler);
-        expect(() => hub.emit(event)).toThrow();
+    it('returns a properly structures message object, rejects bad schema', () => {
+        expect(hub.createMessage(eventKeys.test_one, SRC, validMockPayload)).toBeTruthy();
+        expect(hub.createMessage(eventKeys.test_one, SRC, invalidMockPayload)).toBeFalsy();
+        expect(hub.createMessage(eventKeys.test_one, SRC, partialMockPayload)).toBeFalsy();
     });
 
-    it('removes a handler with off()', () => {
-        hub.on(event.key, handler);
-        hub.off(event.key);
-        hub.emit(event, mockPayload);
-        expect(handler).not.toHaveBeenCalled();
-    });
+    it('returns an array of sources subscribed to an event', () => {
+        const srcOne = `${SRC} One`;
+        const srcTwo = `${SRC} Two`;
+        const srcThree = `${SRC} Three`;
 
-    it('calls all registered handlers for an event', () => {
-        const fn1 = jest.fn();
-        const fn2 = jest.fn();
+        expect(hub.getSubscribers()).toBeFalsy();
+        expect(hub.getSubscribers(eventNames.test_one)).toBeFalsy();
 
-        hub.on(event.key, fn1, fn2);
-        hub.emit(event, mockPayload);
+        hub.subscribeTo(eventNames.test_one, srcOne, mockFnOne);
+        hub.subscribeTo(eventNames.test_one, srcTwo, mockFnTwo);
+        hub.subscribeTo(eventNames.test_one, srcThree, mockFnThree);
 
-        expect(fn1).toHaveBeenCalled();
-        expect(fn2).toHaveBeenCalled();
-    });
-
-    it('does nothing when off() is called on a non-existent key', () => {
-        expect(() => hub.off('non-existent-key')).not.toThrow();
+        const subscribers = hub.getSubscribers(eventNames.test_one);
+        expect(subscribers).toEqual(expect.any(Array));
     });
 });

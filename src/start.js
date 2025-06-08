@@ -1,17 +1,20 @@
-import hub from './events/hub';
-import state from './core/singletons/state';
-import createEvent from './factories/createEvent';
-import EVENT_NAMES from './events/names';
+import eventHub from './events/hub';
+import eventRegistry from './events/registry';
 
-const _MODULE_NAME = '[Start App]'
+const _MODULE_NAME = '[Start App]';
+
+const _EVENT_NAMES = {
+    START_APP: 'start-app',
+}
+
+const _EVENT_KEYS = {
+    START_APP: eventRegistry.createEvent(_EVENT_NAMES.START_APP, { isLaunched: 'boolean' }, 'unique', 'core'),
+};
 
 const start = (mode) => {
-    state.registerRoutes();
-    const startEvent = createEvent(EVENT_NAMES.CORE.START_APP, _MODULE_NAME);
-    const requestEvent = createEvent(EVENT_NAMES.CORE.REQUEST_STATE_COPY, _MODULE_NAME);
-    hub.on(EVENT_NAMES.CORE.STATE_COPY_SENT.KEY, (payload) => console.log(payload));
-    hub.emit(startEvent, { key: startEvent.key, action: 'set', data: { isLaunched: true } });
-    hub.emit(requestEvent, { key: requestEvent.key, action: 'getall' });
+    const message = eventHub.createMessage(_EVENT_KEYS.START_APP, _MODULE_NAME, { isLaunched: true });
+    eventHub.emitMessage(message);
+    return true;
 };
 
 export default start;

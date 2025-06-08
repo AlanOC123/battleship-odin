@@ -1,130 +1,145 @@
+import eventHub from '../../events/hub';
+import eventRegistry from '../../events/registry';
 import createUUID from '../../factories/createUUID';
-import hub from '../../events/hub';
-import EVENT_NAMES from '../../events/names';
-import createEvent from '../../factories/createEvent';
 
-const _MODULE_NAME = '[State Manager]'
+const _MODULE_NAME = '[State]'
 
-const _STATE = {
-    metaData: {
-        version: '1.0',
-        id: createUUID(10, 36),
-        deviceInfo: {
-            agent: navigator.userAgent,
-            language: navigator.language,
-            hardwardConcurrency: navigator.hardwareConcurrency || 'unknown',
-            memory: navigator.deviceMemory || 'unknown',
-        },
-        start: new Date(),
-        end: null,
-    },
-    launchState: {
-        launchPhase: 'not-started',
-        isLaunched: false,
-        isPlayerCreated: false,
-        isSetUp: false,
-        isStarted: false,
-        gameType: null,
-        numPlayers: 0,
-    }
-};
-
-const _safeCopy = (data) => JSON.parse(JSON.stringify(data));
-
-const _ROUTING = {
-    GET: {
-        [ EVENT_NAMES.CORE.REQUEST_DEBUG_STATE.KEY ]: {
-            response:  EVENT_NAMES.CORE.DEBUG_STATE_SENT,
-            payload: _STATE.metaData,
-        },
-    },
-    SET: {
-        [ EVENT_NAMES.CORE.START_APP.KEY ]: {
-            handler: _setLaunchState,
-            response: EVENT_NAMES.CORE.APP_STARTED,
-            payload: { ok: true },
-        }
-    },
-    GETALL: {
-        [ EVENT_NAMES.CORE.REQUEST_STATE_COPY.KEY ]: {
-            response: EVENT_NAMES.CORE.STATE_COPY_SENT,
-            payload: _STATE,
-        }
-    }
+const _EVENT_NAMES = {
+    stateUpdated: 'state-updated',
+    stateReset: 'state-reset',
+    startApp: 'start-app',
 }
 
-const _handleRequest = (payload) => {
-    if (!payload) throw new Error(`${_MODULE_NAME} payload not given. ${payload}`);
+const _EVENT_KEYS = {
+    stateUpdated: eventRegistry.createEvent(
+        _EVENT_NAMES.stateUpdated,
+        { stateUpdated: 'boolean' },
+        'generic',
+        'core'
+    ),
+    stateReset: eventRegistry.createEvent(
+        _EVENT_NAMES.stateReset,
+        { state: 'object' },
+        'unique',
+        'core'
+    ),
+}
 
-    const key = payload.key;
-    const action = payload.action.toUpperCase();
-    const data = payload.data;
-
-    if (!['GET', 'SET', 'GETALL'].includes(action)) {
-        throw new Error(`${_MODULE_NAME} unsupported action: ${action}`);
+const _defaultState = () => ({
+    metaData: {
+        id: createUUID(10, 36),
+        device: navigator.userAgent,
+        memory: navigator.deviceMemory || 'unknown',
+        threads: navigator.hardwareConcurrency || 'unknown',
+        start: new Date().toISOString(),
+        end: null,
+    },
+    appFlow: {
+        isStarted: true,
+        isLaunched: false,
+        isSetUp: false,
+        isAllPlayersShipsPlaced: false,
+        isGameStarted: false,
+        isGameEnded: false,
     }
+});
 
-    if (!key || !action) {
-        throw new Error(`${_MODULE_NAME} cannot complete operation. Missing key or action. ${key}, ${action}`);
-    }
+let _STATE = null;
 
-    const operationData = _ROUTING[action];
+const _safeClone = (data) => {
+    return typeof structuredClone === 'function' ? structuredClone(data) : JSON.parse(JSON.stringify(data));
+}
 
-    if (!operationData){
-        throw new Error(`${_MODULE_NAME} cannot complete operation. Invalid action. ${action}`);
+const _getState = (key) => {
+    if (key === undefined) {
+        return _safeClone(_STATE);
     };
 
-    const responseData = operationData[key];
-
-    if (!responseData){
-        throw new Error(`${_MODULE_NAME} cannot complete operation. Invalid key. ${key}`);
+    if (typeof key !== 'string') {
+        throw new Error(`${_MODULE_NAME} invalid key provided. Key: ${key}`);
     };
 
-    if (action === 'SET') {
-        const handlerFn = responseData.handler;
+    const data = _STATE[key];
 
-        if (!handlerFn) {
-            throw new Error(`${_MODULE_NAME} cannot complete operation. Invalid key. ${key}`);
-        };
-
-        responseData.payload.ok = handlerFn(data);
+    if (!data) {
+        throw new Error(`${_MODULE_NAME} invalid key provided. Data not found. Key: ${key} Data: ${data}`);
     };
 
-    const eventData = createEvent(responseData.response, _MODULE_NAME);
-    const payloadData = _safeCopy(responseData.payload);
-
-    hub.emit(eventData, payloadData);
+    return _safeClone(data);
 };
 
-function _isValidSetRequest(newState) {
-    if (!newState) {
-        console.warn(`${_MODULE_NAME} cannot complete operation. Invalid state. ${newState}`);
+const _setState = (key, newState) => {
+    if (typeof key !== 'string') {
+        throw new Error(`${_MODULE_NAME} invalid key provided. Key: ${key}`);
+    };
+
+    if (typeof newState !== 'object' || newState === null) {
+        throw new Error(`${_MODULE_NAME} invalid state provided. State: ${newState}`);
+    }
+
+    const existing = _STATE[key];
+
+    if (!existing) {
+        _STATE[key] = { ...newState };
+    } else {
+        for (const prop in newState) {
+            if (Object.prototype.hasOwnProperty.call(newState, prop)) {
+                existing[prop] = newState[prop];
+            }
+         };
+    };
+
+    const message = eventHub.createMessage(_EVENT_KEYS.stateUpdated, _MODULE_NAME, { stateUpdated: true });
+    eventHub.emitMessage(message);
+    return true;
+}
+
+const _initState = ({ isLaunched }) => {
+    if (!isLaunched) {
+        console.error(`${_MODULE_NAME} failed to set up state`);
         return false;
     };
 
+    _STATE = _defaultState();
     return true;
 }
 
-function _setLaunchState(newState) {
-    if (!_isValidSetRequest(newState)) return false;
+const resetState = (...keepProps) => {
+    const defaultState = _defaultState();
 
-    for (const key of Object.keys(newState)) {
-        if (key in _STATE.launchState) {
-            _STATE.launchState[key] = newState[key];
+    for (const key in _STATE) {
+        for (const prop in _STATE[key]) {
+            if (!keepProps.includes(prop)) {
+                _STATE[key][prop] = defaultState[key]?.[prop] ?? null;
+            };
         };
     };
 
+    const newState = _safeClone(_STATE);
+
+    const message = eventHub.createMessage(_EVENT_NAMES.stateReset, _MODULE_NAME, { state: newState })
+    eventHub.emitMessage(message);
     return true;
 };
 
-const registerRoutes = () => {
-    for (const [ _, data ] of Object.entries(_ROUTING)) {
-        for (const key of Object.keys(data)) {
-            hub.on(key, _handleRequest)
-        }
-    }
-}
+eventHub.subscribeTo(_EVENT_NAMES.startApp, _MODULE_NAME, _initState);
 
 export default {
-    registerRoutes,
-}
+    getState: (key) => {
+        try {
+            return _getState(key);
+        } catch (err) {
+            console.error(err.message);
+            return false;
+        }
+    },
+    setState: (key, newState) => {
+        try {
+            return _setState(key, newState);
+        } catch (err) {
+            console.error(err.message);
+            return false;
+        }
+    },
+    resetState,
+};

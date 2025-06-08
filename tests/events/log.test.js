@@ -1,49 +1,65 @@
 import log from "../../src/events/log";
-import { mockEvent, buildMockEvent, buildUniqueMockEvent } from '../__mocks__/events.mock';
+import {
+    genericMockEventData,
+    uniqueMockEventData,
+    createGenericMockEventID,
+    createUniqueMockEventID,
+} from '../__mocks__/events.mock';
 
 describe('Event Log', () => {
-    it('creates a valid node from an event object', () => {
-        const event = buildMockEvent();
-        expect(log.createNode(event)).toEqual(expect.objectContaining({
-            key: expect.any(String),
-            type: expect.any(String),
-            source: expect.any(String),
-            family: expect.any(String),
-            time: expect.any(String),
-        }));
-        expect(() => log.createNode()).toThrow();
-        expect(() => log.createNode(event)).not.toThrow();
+    const eventName = {
+        testOne: genericMockEventData.name,
+        testTwo: uniqueMockEventData.name
+    }
+
+    const eventStructure = {
+        testOne: createGenericMockEventID(),
+        testTwo: createUniqueMockEventID(),
+    }
+
+    const genericEntry = {
+        name: eventName.testOne,
+        type: genericMockEventData.type,
+        id: eventStructure.testOne
+    }
+
+    const uniqueEntry = {
+        name: eventName.testTwo,
+        type: uniqueMockEventData.type,
+        id: eventStructure.testTwo
+    }
+
+    beforeEach(() => log.clearLog());
+
+    it('creates a new event entry successfully', () => {
+        expect(log.createEntry(genericEntry)).toBeTruthy();
+        expect(log.createEntry(uniqueEntry)).toBeTruthy();
+        expect(log.createEntry()).toBeFalsy();
+        expect(log.createEntry({ name: null })).toBeFalsy();
+        expect(log.createEntry({ name: 123, type: 456, id: 789 })).toBeFalsy();
     });
 
-    it('returns an array of nodes and ids not effecting internal map', () => {
-        const event = buildMockEvent();
-        log.createNode(event);
-        const logNodes = log.getNodes();
-        expect(logNodes).toEqual(expect.any(Array));
-        logNodes.push('Test');
-        expect(logNodes.length).not.toEqual(log.getNodes().length);
+    it('rejects duplicate unique entries', () => {
+        expect(log.createEntry(uniqueEntry)).toBeTruthy();
+        expect(log.createEntry(uniqueEntry)).toBeFalsy();
     });
 
-    it('clears the log', () => {
-        const event = buildMockEvent();
-        log.createNode(event);
-        const logNodes = log.getNodes();
-
-        expect(logNodes.length).toBeGreaterThan(0);
-        log.clearNodes();
-        expect(log.getNodes().length).toEqual(0);
+    it('allows generic duplicates', () => {
+        expect(log.createEntry({ ...genericEntry, id: '1234' })).toBeTruthy();
+        expect(log.createEntry({ ...genericEntry, id: '5678' })).toBeTruthy();
     });
 
-    beforeEach(() => log.clearNodes());
+    it('filters entries by key/value', () => {
+        log.createEntry({ ...genericEntry, id: '1234' });
+        log.createEntry({ ...genericEntry, id: '5678' });
+        log.createEntry(uniqueEntry);
 
-    it('get filtered events as an array', () => {
-        const genEvent = buildMockEvent();
-        const uniqueEvent = buildUniqueMockEvent();
-        log.createNode(genEvent);
-        log.createNode(genEvent);
-        log.createNode(uniqueEvent);
-        expect(log.filterNodes('family', 'test').length).toEqual(3);
-        expect(log.filterNodes('type', 'generic').length).toEqual(2);
-        expect(() => log.filterNodes()).toThrow()
-    })
+        const filterOne = log.filterEntries('type', 'generic');
+        const filterTwo = log.filterEntries('type', 'unique');
+
+        expect(filterOne).toEqual(expect.any(Array));
+        expect(filterOne.length).toBeGreaterThan(filterTwo.length);
+
+        expect(log.filterEntries()).toBeFalsy();
+    });
 });
