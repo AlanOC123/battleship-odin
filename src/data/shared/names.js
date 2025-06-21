@@ -1,0 +1,51 @@
+const ROOT_NAMES = {
+    EVENT: "Event",
+    PLAYER: "Player",
+    STATE: "State",
+    GAME: "Game",
+    SCREEN: "Screen",
+    SHIP: "Ship",
+    FLEET: "Fleet",
+    TEST: 'Test',
+    BOARD: 'Board',
+}
+
+const REUSED_NAMES = {
+    REGISTRY: "Registry",
+    CREATE: "Create",
+    FLOW: 'Flow',
+    FACTORY: 'Factory',
+    SUITE: 'Suite',
+    NODE: `Node`,
+}
+
+const MODULE_NAMES = {
+    EVENT_HUB: `[${ROOT_NAMES.EVENT} Hub]`,
+    EVENT_LOG: `[${ROOT_NAMES.EVENT} Log]`,
+    EVENT_REGISTRY: `[${ROOT_NAMES.EVENT} ${REUSED_NAMES.REGISTRY}]`,
+    STATE: `[${ROOT_NAMES.STATE}]`,
+    PLAYER_REGISTRY: `[${ROOT_NAMES.PLAYER} ${REUSED_NAMES.REGISTRY}]`,
+    GAME_FLOW: `[${ROOT_NAMES.GAME} ${REUSED_NAMES.FLOW}]`,
+    SCREEN_MANAGER: `[${ROOT_NAMES.SCREEN} ${REUSED_NAMES.FLOW}]`,
+    TEST_SUITE: `[${ROOT_NAMES.TEST} ${REUSED_NAMES.SUITE}]`,
+}
+
+const FUNCTION_NAMES = {
+    START_APP: "[Start App]",
+}
+
+const FACTORY_NAMES = {
+    EVENT: `[${ROOT_NAMES.EVENT} ${REUSED_NAMES.FACTORY}]`,
+    UUID: `[UUID ${REUSED_NAMES.FACTORY}]`,
+    PLAYER: `[${ROOT_NAMES.PLAYER} ${REUSED_NAMES.FACTORY}]`,
+    SHIP: `[${ROOT_NAMES.SHIP} ${REUSED_NAMES.FACTORY}]`,
+    FLEET: `[${ROOT_NAMES.FLEET} ${REUSED_NAMES.FACTORY}]`,
+    BOARD: `[${ROOT_NAMES.BOARD} ${REUSED_NAMES.FACTORY}]`,
+    BOARD_NODE: `[${ROOT_NAMES.BOARD} ${REUSED_NAMES.NODE} ${REUSED_NAMES.FACTORY}]`,
+}
+
+export default {
+    MODULE_NAMES,
+    FUNCTION_NAMES,
+    FACTORY_NAMES,
+}

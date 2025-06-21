@@ -1,16 +1,18 @@
+import GLOBAL_NAMES from '../data/shared/names';
 import createUUID from '../factories/createUUID';
 
-const _MODULE_NAME = '[Event Registry]';
+const _MODULE_NAME = GLOBAL_NAMES.MODULE_NAMES.EVENT_REGISTRY;
+
 const _ID_BASE = 36;
 const _ID_LEN = 10;
 
-let _REGISTRY = new Map();
-
 const _validate = {
     string: (val) => typeof val === 'string' && val.trim() !== '',
-    object: (val) => typeof val === 'object' && val !== null || val !== undefined,
+    object: (val) => typeof val === 'object' && val !== null,
     enum: (val, options) => options.includes(val),
 };
+
+let _registry = new Map();
 
 const _isValidEvent = (name, schema, type, family) => {
     const failures = [];
@@ -26,7 +28,7 @@ const _toBaseID = (str) => [...str].reduce((prev, curr) => prev += curr.charCode
 const _createEventKey = (name, type, family) => `${_toBaseID(name)}-${_toBaseID(type)}-${_toBaseID(family)}-${createUUID(_ID_LEN, _ID_BASE)}`;
 
 const _isPresent = (id) => {
-    const keys = Array.from(_REGISTRY.keys());
+    const keys = Array.from(_registry.keys());
 
     for (const key of keys) {
         const [ name, type, family ] = key.split('-');
@@ -54,7 +56,7 @@ const _createEvent = (name, schema, type, family) => {
         return presentKey;
     };
 
-    _REGISTRY.set(id, { name, schema, type, family });
+    _registry.set(id, { name, schema, type, family });
     return id;
 };
 
@@ -67,7 +69,7 @@ const _deleteEvent = (id) => {
         throw new Error(`${_MODULE_NAME} event not found. ${id}`);
     };
 
-    _REGISTRY.delete(id);
+    _registry.delete(id);
     return true;
 };
 
@@ -80,10 +82,10 @@ const _getEvent = (id) => {
         throw new Error(`${_MODULE_NAME} id not found. ${id}`);
     };
 
-    return Object.assign({}, _REGISTRY.get(id));
+    return Object.assign({}, _registry.get(id));
 }
 
-const clearRegistry = () => _REGISTRY = new Map();
+const clearRegistry = () => _registry = new Map();
 
 export default {
     createEvent: (name, schema, type, family) => {

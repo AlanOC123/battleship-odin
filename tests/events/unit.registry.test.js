@@ -1,7 +1,7 @@
-import { genericMockEventData } from "../__mocks__/events.mock";
+import { genericMockEventData } from "../__mocks__/mock.events";
 import registry from "../../src/events/registry";
 
-describe('Event Registry', () => {
+describe('[Unit] Event Registry', () => {
     beforeEach(() => registry.clearRegistry());
 
     afterEach(() => {

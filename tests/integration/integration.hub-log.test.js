@@ -9,9 +9,9 @@ import {
     partialMockPayload,
     createGenericMockEventID,
     createUniqueMockEventID,
-} from '../__mocks__/events.mock';
+} from '../__mocks__/mock.events';
 
-describe('Event Hub, Event Log Integration', () => {
+describe('[Integration] Event Hub, Event Log', () => {
     const source = '[Hub Test]';
     const eventName = {
         testOne: genericMockEventData.name,

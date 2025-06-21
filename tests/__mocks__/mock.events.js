@@ -1,7 +1,8 @@
+import GLOBAL_NAMES from '../../src/data/shared/names'
 import registry from "../../src/events/registry";
 import hub from "../../src/events/hub";
 
-const _SOURCE = '[Mock Test]';
+const MODULE_NAME = GLOBAL_NAMES.MODULE_NAMES.TEST_SUITE;
 
 export const genericMockEventData = {
     name: 'mock-generic-event',
@@ -51,5 +52,5 @@ export const createUniqueMockEventID = () => registry.createEvent(
     uniqueMockEventData.family
 );
 
-export const createGenericMockMessage = () => hub.createMessage(createGenericMockEventID(), _SOURCE, validMockPayload);
-export const createUniqueMockMessage = () => hub.createMessage(createUniqueMockEventID(), _SOURCE, validMockPayload);
+export const createGenericMockMessage = () => hub.createMessage(createGenericMockEventID(), MODULE_NAME, validMockPayload);
+export const createUniqueMockMessage = () => hub.createMessage(createUniqueMockEventID(), MODULE_NAME, validMockPayload);

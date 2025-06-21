@@ -4,8 +4,9 @@
   "description": "",
   "private": true,
   "scripts": {
-    "test": "jest --verbose",
+    "test": "jest",
     "test-only": "npx jest",
+    "test-silent": "jest --watch --silent",
     "start": "webpack serve",
     "build": "webpack",
     "reset-package": "rm -rf node_modules package-lock.json && npm install"

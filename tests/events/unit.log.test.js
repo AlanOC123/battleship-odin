@@ -4,9 +4,9 @@ import {
     uniqueMockEventData,
     createGenericMockEventID,
     createUniqueMockEventID,
-} from '../__mocks__/events.mock';
+} from '../__mocks__/mock.events';
 
-describe('Event Log', () => {
+describe('[Unit] Event Log', () => {
     const eventName = {
         testOne: genericMockEventData.name,
         testTwo: uniqueMockEventData.name

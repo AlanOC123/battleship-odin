@@ -1,6 +1,6 @@
 import createUUID from "../../../src/factories/createUUID";
 
-describe('Create UUID', () => {
+describe('[Unit] Create UUID', () => {
     it('generates a UUID string', () => {
         expect(createUUID()).toEqual(expect.any(String));
         expect(createUUID().length).toEqual(5);

@@ -4,11 +4,11 @@ import {
     partialMockPayload,
     createGenericMockEventID,
     createUniqueMockEventID,
-} from "../__mocks__/events.mock";
+} from "../__mocks__/mock.events";
 
 import hub from "../../src/events/hub";
 
-describe('Event Hub', () => {
+describe('[Unit] Event Hub', () => {
     const SRC = '[Hub Test]';
 
     const eventNames = {

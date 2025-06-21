@@ -1,8 +1,10 @@
 import log from './log';
 import registry from "./registry";
+import GLOBAL_NAMES from '../data/shared/names';
 
-let _HUB = new Map();
-const _MODULE_NAME = '[Event Hub]';
+const _MODULE_NAME = GLOBAL_NAMES.MODULE_NAMES.EVENT_HUB;
+
+let _hub = new Map();
 
 const _isPresent = (key, map) => map.has(key);
 
@@ -26,7 +28,7 @@ const _subscribeTo = (evName, source, ...fns) => {
         throw new Error(`${_MODULE_NAME} no handler functions provided. ${fns}`);
     };
 
-    const subscribers = _HUB.get(evName) || new Map();
+    const subscribers = _hub.get(evName) || new Map();
     const handlers = subscribers.has(source) ? subscribers.get(source) : new Set();
 
     for (const fn of fns) {
@@ -35,16 +37,16 @@ const _subscribeTo = (evName, source, ...fns) => {
 
     subscribers.set(source, handlers);
 
-    _HUB.set(evName, subscribers);
+    _hub.set(evName, subscribers);
     return true;
 };
 
 const _unsubscribeFrom = (evName, source) => {
-    if (!_isPresent(evName, _HUB)) {
+    if (!_isPresent(evName, _hub)) {
         throw new Error(`${_MODULE_NAME} no event: ${evName}`);
     };
 
-    const subscribers = _HUB.get(evName);
+    const subscribers = _hub.get(evName);
 
     if (!_isPresent(source, subscribers)) {
         throw new Error(`${_MODULE_NAME} source is not subscribed: ${source}`);
@@ -55,11 +57,11 @@ const _unsubscribeFrom = (evName, source) => {
 };
 
 const _removeEvent = (evName) => {
-    if (!_isPresent(evName, _HUB)) {
+    if (!_isPresent(evName, _hub)) {
         throw new Error(`${_MODULE_NAME} no event: ${evName}`);
     };
 
-    _HUB.delete(evName);
+    _hub.delete(evName);
     return true;
 }
 
@@ -73,7 +75,7 @@ const _emitMessage = (message) => {
         throw new Error(`${_MODULE_NAME} error emitting message. Error: ${err.message}`);
     }
 
-    const subscribers = _HUB.get(name);
+    const subscribers = _hub.get(name);
 
     if (!subscribers || subscribers.size === 0) {
         throw new Error(`${_MODULE_NAME} no subscribers for event: ${name}`);
@@ -112,11 +114,11 @@ const _createMessage = (id, source, payload) => {
 };
 
 const _getSubscribers = (evName) => {
-    if (!_isPresent(evName, _HUB)) {
+    if (!_isPresent(evName, _hub)) {
         throw new Error(`${_MODULE_NAME} no event: ${evName}`);
     };
 
-    const subscribers = _HUB.get(evName);
+    const subscribers = _hub.get(evName);
 
     if (!subscribers) {
         throw new Error(`${_MODULE_NAME} no subscribers: ${subscribers}`);
@@ -125,7 +127,7 @@ const _getSubscribers = (evName) => {
     return Array.from(subscribers.keys());
 }
 
-const clearHub = () => _HUB = new Map();
+const clearHub = () => _hub = new Map();
 
 export default {
     subscribeTo: (evName, source, ...fns) => {

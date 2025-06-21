@@ -1,28 +1,18 @@
-import eventHub from '../../events/hub';
-import eventRegistry from '../../events/registry';
+import GLOBAL_NAMES from '../../data/shared/names';
+import EVENT_HUB from '../../events/hub';
+import EVENT_NAMES from '../../data/events/names';
+import EVENT_KEYS from '../../data/events/keys';
 import createUUID from '../../factories/createUUID';
 
-const _MODULE_NAME = '[State]'
+const _MODULE_NAME = GLOBAL_NAMES.MODULE_NAMES.STATE;
 
-const _EVENT_NAMES = {
-    stateUpdated: 'state-updated',
-    stateReset: 'state-reset',
-    startApp: 'start-app',
+const _LISTENERS = {
+    init: EVENT_NAMES.START_APP,
 }
 
-const _EVENT_KEYS = {
-    stateUpdated: eventRegistry.createEvent(
-        _EVENT_NAMES.stateUpdated,
-        { stateUpdated: 'boolean' },
-        'generic',
-        'core'
-    ),
-    stateReset: eventRegistry.createEvent(
-        _EVENT_NAMES.stateReset,
-        { state: 'object' },
-        'unique',
-        'core'
-    ),
+const _PUBLISHERS = {
+    update: EVENT_KEYS.STATE_UPDATED,
+    reset: EVENT_KEYS.STATE_RESET,
 }
 
 const _defaultState = () => ({
@@ -48,6 +38,16 @@ let _STATE = null;
 
 const _safeClone = (data) => {
     return typeof structuredClone === 'function' ? structuredClone(data) : JSON.parse(JSON.stringify(data));
+}
+
+const _initState = ({ isLaunched }) => {
+    if (!isLaunched) {
+        console.error(`${_MODULE_NAME} failed to set up state`);
+        return false;
+    };
+
+    _STATE = _defaultState();
+    return true;
 }
 
 const _getState = (key) => {
@@ -89,18 +89,8 @@ const _setState = (key, newState) => {
          };
     };
 
-    const message = eventHub.createMessage(_EVENT_KEYS.stateUpdated, _MODULE_NAME, { stateUpdated: true });
-    eventHub.emitMessage(message);
-    return true;
-}
-
-const _initState = ({ isLaunched }) => {
-    if (!isLaunched) {
-        console.error(`${_MODULE_NAME} failed to set up state`);
-        return false;
-    };
-
-    _STATE = _defaultState();
+    const message = EVENT_HUB.createMessage(_PUBLISHERS.update, _MODULE_NAME, { stateUpdated: true });
+    EVENT_HUB.emitMessage(message);
     return true;
 }
 
@@ -115,14 +105,12 @@ const resetState = (...keepProps) => {
         };
     };
 
-    const newState = _safeClone(_STATE);
-
-    const message = eventHub.createMessage(_EVENT_NAMES.stateReset, _MODULE_NAME, { state: newState })
-    eventHub.emitMessage(message);
+    const message = EVENT_HUB.createMessage(_PUBLISHERS.reset, _MODULE_NAME, { props: keepProps })
+    EVENT_HUB.emitMessage(message);
     return true;
 };
 
-eventHub.subscribeTo(_EVENT_NAMES.startApp, _MODULE_NAME, _initState);
+EVENT_HUB.subscribeTo(_LISTENERS.init, _MODULE_NAME, _initState);
 
 export default {
     getState: (key) => {
